@@ -1,0 +1,6 @@
+# Python 3.12. Installed by setup/setup.ps1 or setup/setup.sh into pipeline/.venv
+faster-whisper==1.2.1
+opencv-python-headless==5.0.0.93
+numpy==2.5.4
+requests==2.34.2
+yt-dlp==2026.8.19

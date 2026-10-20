@@ -1,0 +1,43 @@
+# Hermes profile config for the clipper agent.
+# install.sh fills in REPO_PATH; the NYO key goes in the profile's .env
+# as HERMES_CUSTOM_NYOLAB_API_KEY (install.sh can copy it from the repo's .env).
+model:
+  default: glm-5.3-flash
+  provider: nyolab
+providers:
+  nyolab:
+    name: NyoLab
+    base_url: https://llm.nyolab.ai/api/public/v1
+    model: glm-5.3-flash
+    default_model: glm-5.3-flash
+    discover_models: true
+    models:
+      glm-5.3-flash: {}
+      glm-5.3: {}
+      qwen3-30b: {}
+    key_env: HERMES_CUSTOM_NYOLAB_API_KEY
+fallback_providers:
+  - provider: nyolab
+    model: qwen3-30b
+_config_version: 46
+display:
+  interface: tui
+  skin: default
+  streaming: true
+terminal:
+  backend: local
+  cwd: REPO_PATH
+  timeout: 900
+browser:
+  cloud_provider: local
+  inactivity_timeout: 300
+  headed: true
+platform_toolsets:
+  cli: [terminal, file, skills, todo, memory, clarify, web, browser]
+  cron: [terminal, file, skills, todo]
+agent:
+  max_turns: 80
+  reasoning_effort: medium
+compression:
+  proactive_prune_tokens: 24000
+mcp_servers: {}

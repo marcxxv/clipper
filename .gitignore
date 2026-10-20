@@ -1,0 +1,21 @@
+# your data and secrets — never committed
+.env
+sources/*
+!sources/.gitkeep
+output/*
+!output/.gitkeep
+archive/
+opencode.json
+
+# environment and caches
+pipeline/.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# temporary render files
+pipeline/cap_*.ass
+pipeline/check.ass
+pipeline/sheet/
+pipeline/reedit_tmp/
+pipeline/dbg*
