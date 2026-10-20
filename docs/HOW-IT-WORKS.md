@@ -33,6 +33,37 @@ The run prints what it decided, e.g. `profile: 1920x1080 · 129 words/min · 29 
 - Long videos are read in 40-minute windows, so a 3-hour podcast is 5 requests (about 5 cents).
 - The report shows the **real** opening words of each clip, not what the AI claimed.
 
+## Virality score (ranking candidates)
+
+After the quality checks, every surviving candidate gets a score from its first 3 seconds, the part that decides whether people keep watching (`pipeline/score.py`):
+
+| Signal | How | Cost |
+|---|---|---|
+| voice energy | loudness swing | free |
+| animated voice | pitch variation in semitones (monotone vs lively) | free |
+| pace | words per second | free |
+| dead air | silence before and inside the opening | free |
+| face | size of the largest face | free |
+| motion, cuts | frame-to-frame change, camera cuts | free |
+| AI look | `glm-5.3-flash` views 3 frames **as cropped for the phone** and rates expression and visual interest 1–10 | ~0.5 cent / video |
+| strong line | the AI's own ranking from the transcript | — |
+
+Signals are compared **within the video**, then weighted by **category**. A gaming or sports clip is judged on motion and energy; a podcast on voice, face and the line itself. The category is detected from the transcript (`podcast, talk, education, motivation, comedy, drama, news, gaming, sports, music, other`), or set with `--category=`. The weights are in `WEIGHTS` in `score.py`; they're reasoned starting values, to be tuned against real view counts.
+
+The score only **re-orders and chooses among clips that already passed every check**, so it can't make a clip worse. Clips are numbered best-first (`01` = highest). The report shows each score (50 = average for that video) and its two biggest strengths.
+
+## Learning from winners (`trends.py`)
+
+```
+python pipeline/trends.py "@ChannelName, @Another"     # channels: on-topic, recommended
+python pipeline/trends.py "stoicism, mindset"          # hashtags: popular but noisy
+python pipeline/clips.py "<video>" --trend=channelname-another
+```
+
+It lists the most-viewed Shorts of each channel's Shorts tab or hashtag page and downloads only the first 8 seconds of each (deleted after measuring). It measures the same signals as the scorer, plus the opening line, and writes `trends/<name>.md`: typical length, pace, dead air, face share, and example openings. With `--trend=`, that brief is added to the AI's instructions, so it prefers moments that open the way current winners do. It's free (no AI requests) and takes about 2 minutes.
+
+Use channels in your niche. Broad hashtags like `#motivation` are dominated by music and visual Shorts, and the brief warns when a source has few talking Shorts. Example from `@JordanBPeterson`: all 12 top Shorts start speaking in the first frame at about 3.2 words/s with no dead air, about 40 s long, 9 of 12 on a visible face. Openings speak directly to the viewer ("Are you…", "Imagine that you're…").
+
 ## Re-editing (`reedit` mode)
 
 For trailers and promos, which are already fast edits, a continuous cut is just a 10-second fragment. Instead:
@@ -84,7 +115,7 @@ At the top of `pipeline/clips.py` (and `pipeline/reedit.py` where marked):
 | `MODEL` / `FALLBACK` | glm-5.3-flash / glm-5, qwen3-30b | AI models, tried in order |
 | `N_CLIPS` | 10 | clips per video (fewer for short sources) |
 | `MIN_S` / `MAX_S` | 22 / 45 s | clip length; scaled down for sources under 10 min. **Set from the campaign brief.** |
-| `ROUNDS` | 2 | ask the AI again if too few picks pass |
+| `ROUNDS` | 3 | ask the AI again if too few picks pass |
 | `CHUNK_MIN` | 40 | long videos are read in windows this long |
 | `QUIET_WPM` / `FASTCUT_CPM` | 40 / 12 | mode detection thresholds |
 | `FACE_CONF` | 0.85 | face confidence needed |
@@ -95,9 +126,18 @@ At the top of `pipeline/clips.py` (and `pipeline/reedit.py` where marked):
 | `DIP_WIN` | 12 (×10 ms) | how far a word boundary may move to a loudness dip |
 | `HEADLINE` | off | hook text on normal clips (`--headline` per run) |
 | `TARGET` (reedit) | 30–45 s | re-edit length |
+| `HOOK_S` / `HOOK_FRAMES` / `WEIGHTS` (score.py) | 3 s / 3 / per category | scoring window, frames the AI views, signal weights |
 | `XFADE` / `KEEP_GAP` (reedit) | 0.20 / 1.5 s | cross-fade / play-through gap |
 
+Personal values go in **`settings.local.json`** at the repo root (git-ignored), e.g. `{"MIN_S": 30, "MAX_S": 60, "N_CLIPS": 5, "TARGET": [45, 60]}`. Any uppercase setting above can be overridden there; a campaign length there always wins over the automatic lengths.
+
 Changing `TIMING` (a version label) makes cached transcripts re-snap their word timings without re-transcribing.
+
+## Tests
+
+- `python pipeline/clips.py --check`: setup self-test. `--check --no-ai` skips the key.
+- `python pipeline/clips.py <video> --mode=visual --no-ai`: a full offline run, with no key and no AI.
+- `.github/workflows/checks.yml` runs on every push and pull request. It installs with the real setup scripts on **Windows and Linux**, generates a test video, and clips it offline (`CLIPS_WHISPER=tiny` keeps the download small).
 
 ## Known limits
 

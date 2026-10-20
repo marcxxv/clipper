@@ -1,0 +1,53 @@
+# Runs on every push and pull request: installs with the real setup scripts on
+# Linux and Windows, then clips a generated test video end-to-end, offline
+# (--no-ai, tiny speech model). A red X means the change broke something.
+name: checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    env:
+      CLIPS_WHISPER: tiny
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup (Linux)
+        if: runner.os == 'Linux'
+        run: bash setup/setup.sh
+
+      - name: setup (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: powershell -ExecutionPolicy Bypass -File setup\setup.ps1
+
+      - name: test video and offline run (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          ffmpeg -v error -f lavfi -i testsrc2=s=1280x720:r=30:d=45 -f lavfi -i "sine=f=220:d=45" \
+            -shortest -c:v libx264 -c:a aac sources/ci.mp4
+          pipeline/.venv/bin/python pipeline/clips.py --check --no-ai
+          pipeline/.venv/bin/python pipeline/clips.py sources/ci.mp4 --mode=visual --no-ai
+          ls output/ci/*.mp4 output/ci/*.txt output/ci/report.md
+
+      - name: test video and offline run (Windows)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          $env:Path = [Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [Environment]::GetEnvironmentVariable("Path","User")
+          ffmpeg -v error -f lavfi -i testsrc2=s=1280x720:r=30:d=45 -f lavfi -i "sine=f=220:d=45" -shortest -c:v libx264 -c:a aac sources\ci.mp4
+          pipeline\.venv\Scripts\python.exe pipeline\clips.py --check --no-ai
+          if ($LASTEXITCODE) { exit 1 }
+          pipeline\.venv\Scripts\python.exe pipeline\clips.py sources\ci.mp4 --mode=visual --no-ai
+          if ($LASTEXITCODE) { exit 1 }
+          Get-ChildItem output\ci
+          if (-not (Test-Path output\ci\report.md)) { exit 1 }

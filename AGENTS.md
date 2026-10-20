@@ -21,12 +21,34 @@ Read by OpenCode, Hermes (`clipper` profile), Claude Code and Codex.
 - Commit or print `.env` or any key.
 
 ## Keeping records (every change to code, settings, rules or docs)
-1. Commit (or branch) before editing, so it can be undone.
-2. Update `README.md` / `docs/` if behaviour or settings changed.
-3. Update `.agents/skills/clipping/SKILL.md` if a rule or how-to changed. It's the only copy; every agent and the pipeline read it.
-4. Add a dated entry to `CHANGELOG.md`, then commit with a clear message and push.
+1. Update `README.md` / `docs/` if behaviour or settings changed.
+2. Update `.agents/skills/clipping/SKILL.md` if a rule or how-to changed. It's the only copy; every agent and the pipeline read it.
+3. Add a dated entry to `CHANGELOG.md`.
+4. Share it through git, automatically, as below.
 
 A change that lives only in a chat is lost.
+
+## Git: automatic, no need to ask
+
+Before starting work, run `git pull` (if it fails because of local edits, keep them and tell the user in one line).
+
+Who is working? Compare `gh api user --jq .login` with the repo owner (`gh repo view --json owner --jq .owner.login`):
+
+**Owner:** after a change is tested, commit and `git push` to `main` right away. Use a clear message saying what changed and why.
+
+**Anyone else (collaborator):** `main` is protected; never try to push to it. While doing the user's task, you may improve the shared pipeline: fix a bug, handle a new kind of video, make clips better for everyone. When that happens and the change is tested:
+1. `git switch -c improve/<short-name>`, commit with a clear message;
+2. `git push -u origin improve/<short-name>`;
+3. `gh pr create --base main` with a short body: **what** changed, **why** (what went wrong or what's better), and **how it was tested** (commands run, results);
+4. tell the user in one line, with the PR link. They don't need to understand git.
+
+Do this without asking for small, clearly beneficial fixes. **Ask first** if the change is large (over ~200 changed lines), changes defaults, makes runs cost more, or removes a feature. Then switch back to `main` so the user's work continues normally.
+
+**Never** open a pull request for personal settings (put those in `settings.local.json`, which is git-ignored), untested experiments, keys, or videos.
+
+Pull requests run the `checks` workflow (Windows + Linux install and an offline test run). Check it with `gh pr checks`; fix it if it fails.
+
+If `gh` isn't logged in, run `gh auth login` with the user, or leave the change local and explain in one line.
 
 ## Platform notes
 - Windows: the Python is `pipeline\.venv\Scripts\python.exe`; macOS/Linux: `pipeline/.venv/bin/python`.

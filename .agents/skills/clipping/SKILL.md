@@ -1,7 +1,7 @@
 ---
 name: clipping
 description: "Run the clipper pipeline (any video or YouTube link to vertical captioned shorts) and apply its editorial rules: pick hooks, write titles, check clips before publishing."
-version: 2.0.0
+version: 2.1.0
 ---
 
 # Clipping
@@ -24,6 +24,9 @@ From the repository root. The Python inside the setup's virtual environment:
 <python> pipeline/clips.py "<video>" --mode=reedit   # force clips | reedit | visual
 <python> pipeline/clips.py "<video>" --headline      # hook text at the top of normal clips
 <python> pipeline/clips.py --check                   # test the setup (free)
+<python> pipeline/clips.py "<video>" --category=gaming   # override the detected category
+<python> pipeline/trends.py "@Channel, hashtag"          # learn from a niche's top Shorts
+<python> pipeline/clips.py "<video>" --trend=<name>      # pick clips like the winners
 <python> pipeline/check_captions.py "<video>"        # measure caption sync
 ```
 
@@ -32,6 +35,13 @@ From the repository root. The Python inside the setup's virtual environment:
   re-edits. Each run clears that video's old clips.
 - After a run, read `report.md` and look at real frames (extract one with
   ffmpeg) before saying a clip is good. Lines starting with `!` are problems.
+- Clips are numbered best-first by a hook score (voice, picture, AI look,
+  weighted by category). Suggest posting in that order.
+- New niche? Run `trends.py` on 2-3 channels that already win there (channels
+  beat hashtags: broad hashtags are mostly music/visual Shorts), then use
+  `--trend=`. Re-run it monthly; what wins changes.
+- Campaign lengths and other personal values go in `settings.local.json`
+  (e.g. `{"MIN_S": 30, "MAX_S": 60}`), never in the code.
 - Cost: only the AI pick is paid, about 1-2 US cents a run (about 5 cents for
   a 3-hour video). Transcription runs locally and is cached.
 
@@ -130,9 +140,11 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
 
 ## Keeping records (every change)
 
-1. Make the change on a git branch or commit before editing, so it can be undone.
-2. Update `README.md` / `docs/` if behaviour or settings changed.
-3. Update this skill if a rule or how-to changed.
-4. Add a dated line to `CHANGELOG.md`, then commit and push.
+1. Update `README.md` / `docs/` if behaviour or settings changed.
+2. Update this skill if a rule or how-to changed.
+3. Add a dated line to `CHANGELOG.md`.
+4. Share it through git as `AGENTS.md` says: the owner pushes to `main`;
+   anyone else opens a pull request automatically for tested, general
+   improvements.
 
 Hermes users also log agent/profile changes in `~/.hermes/CONFIG-CHANGES.md`.

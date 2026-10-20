@@ -3,6 +3,21 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-21 — hook scoring, trends, automatic git workflow
+- `score.py`: every candidate's first 3 s scored on voice (energy, pitch variation, pace,
+  dead air), picture (face, motion, cuts) and an AI look at the phone-cropped frames
+  (NYO glm-5.3-flash, which accepts images), weighted by detected content category.
+  Clips numbered best-first; scores and strengths in the report. `--category=` override.
+- `trends.py`: measures the most-viewed Shorts of channels (`@name`) or hashtags; writes
+  `trends/<name>.md`; `clips.py --trend=<name>` adds that brief to the AI's instructions.
+- `settings.local.json` (git-ignored) for personal values such as campaign lengths.
+- `--no-ai` offline mode and `CLIPS_WHISPER` model override; `ROUNDS` 2 → 3.
+- GitHub: `main` protected (pull requests required, owner bypasses); `checks` workflow
+  installs and runs an offline clip on Windows and Linux for every push and PR.
+- `AGENTS.md`: owner's agent pushes automatically; a collaborator's agent opens pull
+  requests by itself for tested, general improvements.
+- Windows setup falls back to Chocolatey when winget is missing.
+
 ## 2026-10-21 — published as a repository
 - Repository layout: one skill at `.agents/skills/clipping/` (read by OpenCode, Hermes,
   Claude Code, Codex and the pipeline itself); setup scripts for Windows and macOS/Linux;

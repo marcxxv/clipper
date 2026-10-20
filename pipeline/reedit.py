@@ -206,6 +206,7 @@ def main():
 
 
 def run(video):
+    C.apply_local(globals())                     # e.g. {"TARGET": [45, 60]}
     C.OUT = C.OUTROOT / video.stem
     dest = C.OUT / "reedit"
     dest.mkdir(parents=True, exist_ok=True)

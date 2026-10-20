@@ -19,3 +19,6 @@ pipeline/check.ass
 pipeline/sheet/
 pipeline/reedit_tmp/
 pipeline/dbg*
+
+# personal settings
+settings.local.json

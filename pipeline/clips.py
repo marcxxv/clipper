@@ -18,6 +18,9 @@ from pathlib import Path
 
 import requests
 
+os.environ.setdefault("OPENCV_LOG_LEVEL", "ERROR")          # quiet OpenCV's own warnings
+os.environ.setdefault("OPENCV_FFMPEG_LOGLEVEL", "-8")       # and its decoder chatter
+
 if hasattr(sys.stdout, "reconfigure"):          # Windows consoles default to cp1252
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
@@ -31,13 +34,14 @@ PROFILE     = Path.home() / ".hermes/profiles/clipper"   # optional Hermes agent
 
 MODEL       = "glm-5.3-flash"
 FALLBACK    = ["glm-5.3-flash", "glm-5", "qwen3-30b"]
-WHISPER     = "large-v3-turbo"
+WHISPER     = os.environ.get("CLIPS_WHISPER", "large-v3-turbo")   # "tiny" for quick tests
+NO_AI       = "--no-ai" in sys.argv[1:]    # offline: no AI requests (tests, no key)
 
 N_CLIPS     = 10          # final clips
 CANDIDATES  = 15          # asked from the model, best N survive
 MIN_S, MAX_S = 22, 45     # clip length window
 GAP         = 1.5         # min seconds between clips
-ROUNDS      = 2           # ask the model again if too few picks survive
+ROUNDS      = 3           # ask the model again if too few picks survive
 SNAP        = 6           # how far a start may move to reach a clean sentence
 HIGHLIGHT   = "&H001FD9FF&" # amber, ASS BGR
 FONTS       = ROOT / "fonts"          # Montserrat (SIL OFL), loaded by the ass filter
@@ -65,6 +69,20 @@ PAUSE       = 0.7         # silence that ends a sentence when the transcript has
 FACE_CONF   = 0.85        # detector confidence; statues and posters score ~0.6-0.8
 
 API = "https://llm.nyolab.ai/api/public/v1/chat/completions"
+LOCAL = REPO / "settings.local.json"     # personal overrides, never committed
+
+
+def apply_local(module_globals):
+    """Overrides from settings.local.json, e.g. {"MIN_S": 30, "MAX_S": 60} for a campaign."""
+    if not LOCAL.exists():
+        return {}
+    try:
+        d = json.loads(LOCAL.read_text(encoding="utf-8"))
+    except ValueError as e:
+        sys.exit(f"settings.local.json is not valid JSON: {e}")
+    used = {k: v for k, v in d.items() if k in module_globals and k.isupper()}
+    module_globals.update(used)
+    return used
 USED = {"model": None}
 # ----------------------------------------
 
@@ -250,13 +268,26 @@ def set_lang(code):
 
 # ---------------- hook selection ----------------
 
-def editorial_rules():
-    """The part of the clipping skill the AI needs: between the brief markers."""
-    if not SKILL.exists():
+def _brief(path):
+    if not path.exists():
         return ""
     m = re.search(r"<!-- brief:start -->(.*?)<!-- brief:end -->",
-                  SKILL.read_text(encoding="utf-8"), re.S)
+                  path.read_text(encoding="utf-8"), re.S)
     return m.group(1).strip() if m else ""
+
+
+TREND = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--trend=")), None)
+
+
+def editorial_rules():
+    """What the AI is told: the skill's brief, plus a trends brief with --trend=."""
+    brief = _brief(SKILL)
+    if TREND:
+        t = _brief(REPO / "trends" / f"{TREND}.md")
+        if not t:
+            sys.exit(f"no trends/{TREND}.md: run  python pipeline/trends.py \"<topic>\"  first")
+        brief += "\n\n" + t
+    return brief
 
 
 def _prompt(transcript, total, taken=()):
@@ -279,6 +310,22 @@ def _prompt(transcript, total, taken=()):
         '  "reason": "why it works, max 8 words"}]\n\n'
         "Transcript:\n" + transcript
     )
+
+
+def chat(content, model=None, max_tokens=4000):
+    """One request to NYO (text, or a list with images); falls back down FALLBACK."""
+    for m in ([model] if model else []) + [x for x in FALLBACK if x != model]:
+        try:
+            r = requests.post(API, timeout=180, headers={"Authorization": f"Bearer {api_key()}"},
+                              json={"model": m, "temperature": 0.2, "max_tokens": max_tokens,
+                                    "messages": [{"role": "user", "content": content}]})
+        except requests.RequestException:
+            continue
+        if r.ok:
+            txt = (r.json()["choices"][0]["message"]["content"] or "").strip()
+            if txt:
+                return txt
+    return None
 
 
 def _ask(prompt, want):
@@ -480,9 +527,7 @@ def pick_hooks(lines, words, total):
         _validate(cands, words, total, picks)
         print(f"   round {rnd + 1}: {len(picks) - before} of {len(cands)} passed the checks")
 
-    picks = picks[:N_CLIPS]                            # model order = strongest first
-    picks.sort(key=lambda p: p["start"])
-    return picks
+    return picks                                       # AI order = strongest first
 
 
 def _validate(cands, words, total, picks):
@@ -908,9 +953,9 @@ def pick_by_energy(video, total):
             continue
         picks.append({"start": s0, "end": s0 + L, "hook": "", "title": f"moment at {int(s0//60)}:{int(s0%60):02d}",
                       "hashtags": [], "reason": "audio peak / fast cutting"})
-        if len(picks) >= N_CLIPS:
+        if len(picks) >= N_CLIPS * 2:                  # surplus, so the scorer can choose
             break
-    return sorted(picks, key=lambda p: p["start"])
+    return picks
 
 
 def profile(video, words, total):
@@ -934,7 +979,9 @@ def profile(video, words, total):
 def tune(total):
     """Short sources can't yield ten 30-second clips — scale the window."""
     global MIN_S, MAX_S, N_CLIPS
-    if total >= 600:
+    if "MIN_S" in apply_local({"MIN_S": 0}):          # a campaign length always wins
+        pass
+    elif total >= 600:
         MIN_S, MAX_S = 22, 45
     elif total >= 300:
         MIN_S, MAX_S = 16, 38
@@ -966,7 +1013,7 @@ def check():
             line(False, f"python package {mod}", "run the setup script again")
     line(SKILL.exists() and bool(editorial_rules()), "editorial rules (.agents/skills/clipping)")
     try:
-        key = api_key()
+        key = None if NO_AI else api_key()
     except SystemExit as e:
         line(False, "NYO key", str(e))
         key = None
@@ -987,6 +1034,8 @@ def main():
         sys.exit(0 if check() else 1)
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     forced = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--mode=")), None)
+    cat_arg = next((a.split("=", 1)[1].lower() for a in sys.argv[1:]
+                    if a.startswith("--category=")), None)
     global HEADLINE
     HEADLINE = HEADLINE or "--headline" in sys.argv[1:]
     arg = args[0] if args else None
@@ -1003,6 +1052,8 @@ def main():
 
     OUT = OUTROOT / video.stem
     OUT.mkdir(parents=True, exist_ok=True)
+    if (used := apply_local(globals())):
+        print(f"   local settings: {used}")
 
     t0 = time.time()
     total = duration(video)
@@ -1014,9 +1065,18 @@ def main():
     if mode == "reedit":                  # trailer / promo: assemble, don't cut
         import reedit
         return reedit.run(video)
+    if NO_AI and mode != "visual":
+        sys.exit("--no-ai only works with --mode=visual (picking moments from speech needs the AI)")
+    import score
+    cat = score.category(sentences(words), cat_arg or ("gaming" if mode == "visual" else None))
+    print(f"   category: {cat}" + ("" if cat_arg else " (detected; override with --category=)"))
     picks = pick_by_energy(video, total) if mode == "visual" else pick_hooks(lines, words, total)
     if not picks:
         sys.exit("no usable clips")
+    print(f"   scoring {len(picks)} candidates (voice, picture, AI look)...")
+    picks = score.rank(video, _audio(video), words, picks, cat, use_ai=not NO_AI)[:N_CLIPS]
+    for c in picks:
+        print(f"      {c['score']:5.1f}  {c['why_score']}" + (f" · {c['look_why']}" if c.get("look_why") else ""))
 
     for old in list(OUT.glob("*.mp4")) + list(OUT.glob("[0-9][0-9]-*.txt")) + [OUT / "review.png"]:
         old.unlink(missing_ok=True)       # never mix two runs in one folder
@@ -1032,7 +1092,8 @@ def main():
 
     rows = "\n".join(
         f"| {c['file'].name} | {int(c['start']//60)}:{int(c['start']%60):02d} | "
-        f"{c['end']-c['start']:.0f}s | {c.get('mode','')} | {c['title']} | {c['hook']} | "
+        f"{c['end']-c['start']:.0f}s | {c.get('score', '')} | {c.get('why_score', '')} | "
+        f"{c.get('mode','')} | {c['title']} | {c['hook']} | "
         f"{' '.join(c['hashtags'])} | {c['reason']} |"
         for c in picks)
     (OUT / "report.md").write_text(
@@ -1040,8 +1101,10 @@ def main():
         f"{len(picks)} clips · {total/60:.0f} min source · {mode} mode · {LANG} · "
         f"model `{USED['model'] or ('none' if mode == 'visual' else MODEL)}`\n\n"
         f"![review]({sheet.name})\n\n"
-        f"| File | Start | Len | Mode | Title | Hook | Tags | Why |\n"
-        f"|---|---|---|---|---|---|---|---|\n{rows}\n", encoding="utf-8")
+        f"Category **{cat}** · clips numbered best first by score (50 = average for this "
+        f"video; see docs/HOW-IT-WORKS.md#virality-score)\n\n"
+        f"| File | Start | Len | Score | Strengths | Mode | Title | Hook | Tags | Why |\n"
+        f"|---|---|---|---|---|---|---|---|---|---|\n{rows}\n", encoding="utf-8")
 
     print(f"\ndone in {(time.time()-t0)/60:.1f} min → {OUT}")
     print(f"review sheet: {sheet}")

@@ -27,10 +27,13 @@ function Has-Libass {
     return $f -match " (ass|subtitles) "
 }
 if (-not (Has-Libass)) {
-    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        throw "winget not found. Install ffmpeg from https://www.gyan.dev/ffmpeg/builds/ (full build), add its bin folder to PATH, then re-run."
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        winget install --id Gyan.FFmpeg -e --accept-source-agreements --accept-package-agreements
+    } elseif (Get-Command choco -ErrorAction SilentlyContinue) {
+        choco install ffmpeg-full -y --no-progress
+    } else {
+        throw "Neither winget nor choco found. Install ffmpeg from https://www.gyan.dev/ffmpeg/builds/ (full build), add its bin folder to PATH, then re-run."
     }
-    winget install --id Gyan.FFmpeg -e --accept-source-agreements --accept-package-agreements
     Refresh-Path
     if (-not (Has-Libass)) {
         Write-Host "ffmpeg was installed but this window can't see it yet. Close PowerShell, open a new one, and re-run this script." -ForegroundColor Yellow
