@@ -3,6 +3,13 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-21 — illustrated README overview
+- Replaced the README's text-heavy diagram with a custom four-step illustration:
+  source video, timed speech, three selection modes and captioned phone previews.
+- Kept detailed D2 diagrams in the architecture guide, linked from the overview.
+- Added a local Pillow renderer, bundled licensed fonts and design notes so the
+  graphic can be updated without a paid graphics service.
+
 ## 2026-10-21 — portrait architecture refresh
 - Redesigned both D2 diagrams as numbered portrait flows with a restrained palette,
   consistent cards and no crossing connectors. Updated the README image presentation.

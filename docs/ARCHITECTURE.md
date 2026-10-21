@@ -35,6 +35,21 @@ Re-edits bypass ranking: they assemble lines into a new story, then render and v
 
 Every agent reads the same rules (`AGENTS.md`, `.agents/skills/clipping/`). The owner's agent pushes straight to `main`. A collaborator's agent opens a pull request by itself for tested, general improvements. Every push and pull request runs the Windows + Linux checks. Owner pushes reach `main` before those checks complete; collaborator pull requests are merged after passing checks.
 
+## README visual overview
+
+The README uses [an illustrated four-step overview](architecture/overview.png) so readers can understand the product before reading the detailed diagrams. The source video, waveform and phone previews are illustrations, not pipeline screenshots. It groups transcription and analysis into one step, and selection and ranking into another; the mode-specific details remain above.
+
+Rebuild it from the repository root with Python and Pillow:
+
+```sh
+python -m pip install Pillow==11.3.0
+python docs/architecture/render-overview.py
+```
+
+The renderer uses the bundled, licensed fonts in `docs/architecture/fonts/`; no API or paid graphics service is required. Commit the renderer and regenerated PNG together. Check the image at the README's 720-pixel display width after edits. This illustration is maintained separately from the D2 source/image check.
+
+Design direction: [Signal to Story](architecture/visual-direction.md).
+
 ## Keeping the diagrams current
 
 When a feature, step, mode or flow changes:

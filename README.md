@@ -11,12 +11,12 @@ Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Sho
 - **Cheap.** Transcription and editing run on your computer for free. Only the AI pick is paid: about **1–2 US cents per video**.
 
 <p align="center">
-  <a href="docs/architecture/pipeline.svg">
-    <img src="docs/architecture/pipeline.svg" width="720" alt="Clipper pipeline: source, transcription, mode selection, story selection, clip ranking, framing and verified output. Re-edits skip ranking.">
+  <a href="docs/ARCHITECTURE.md">
+    <img src="docs/architecture/overview.png" width="720" alt="Four steps: bring a video; read speech, timing and scene cuts; select talk moments, reorder trailers or detect visual peaks; frame, caption and check vertical clips.">
   </a>
 </p>
 
-More diagrams, including how changes travel between people: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+Detailed pipeline and collaboration diagrams: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 It runs on **Windows, macOS and Linux**, either by itself or with an AI coding agent (**OpenCode**, **Hermes**, Claude Code, Codex). The agent reads the same rules either way.
 
