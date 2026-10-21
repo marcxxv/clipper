@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1680" viewBox="0 0 1120 1680" role="img" aria-labelledby="title desc">
+<title id="title">Clipper system architecture</title>
+<desc id="desc">CLI or agents run a local Python pipeline. Video ingestion feeds transcription and a mode router. Clips use AI selection and validation; visual mode uses signal peaks; both are ranked. Re-edits assemble AI-selected lines and bypass ranking. Shared framing, captions and FFmpeg export feed verification and local outputs. Editorial rules, settings, trend briefs and transcript cache support the pipeline. AI-marked modules call the external NYO API.</desc>
+<defs>
+<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#3468C5" stroke-width="1.5"/></marker>
+<marker id="aiarrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#A85B15" stroke-width="1.5"/></marker>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#172E42}.small{fill:#5E7184}path,line{stroke-linejoin:round;stroke-linecap:round}</style>
+</defs><rect width="1120" height="1680" fill="#F7F9FC"/>
+<text x="40" y="48" font-size="16" font-weight="700" style="fill:#3468C5">CLIPPER</text>
+<text x="40" y="94" font-size="38" font-weight="700" style="fill:#172E42">System architecture</text>
+<text x="40" y="125" font-size="21" style="fill:#5E7184">Three processing paths. One local video engine.</text>
+<rect x="40" y="156" width="1040" height="112" rx="14" fill="#EDF2FA" stroke="#D6E0EF"/>
+<rect x="60" y="174" width="275" height="76" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="76" y="203" font-size="20" font-weight="700" style="fill:#172E42">YouTube / local video</text>
+<text x="76" y="235" font-size="15" style="fill:#3468C5">URL or sources/&lt;video&gt;</text>
+<rect x="405" y="174" width="300" height="76" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="421" y="203" font-size="20" font-weight="700" style="fill:#172E42">CLI or coding agent</text>
+<text x="421" y="235" font-size="15" style="fill:#3468C5">pipeline/clips.py</text>
+<rect x="775" y="174" width="285" height="76" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="791" y="203" font-size="20" font-weight="700" style="fill:#172E42">Campaign configuration</text>
+<text x="791" y="235" font-size="15" style="fill:#3468C5">settings.local.json</text>
+<path d="M335 212 L405 212" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M918 250 L918 320" fill="none" stroke="#3468C5" stroke-width="2"/>
+<rect x="40" y="328" width="770" height="1120" rx="18" fill="#EEF3FA" stroke="#B7CADD"/>
+<text x="60" y="360" font-size="17" font-weight="700" style="fill:#3468C5">LOCAL ENGINE</text>
+<text x="485" y="360" font-size="17" style="fill:#5E7184">Python · CPU · FFmpeg</text>
+<rect x="65" y="384" width="26" height="24" rx="6" fill="#172E42" stroke="#172E42"/>
+<text x="73" y="401" font-size="13" font-weight="700" style="fill:#FFFFFF">1</text>
+<text x="103" y="401" font-size="15" font-weight="700" style="fill:#5E7184">INGEST &amp; UNDERSTAND</text>
+<path d="M555 250 L555 295 L795 295 L795 412 L172 412 L172 425" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="65" y="425" width="215" height="132" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="81" y="454" font-size="20" font-weight="700" style="fill:#172E42">Media loader</text>
+<text x="81" y="481" font-size="18" style="fill:#5E7184">Download / inspect</text>
+<text x="81" y="506" font-size="18" style="fill:#5E7184">Decode audio</text>
+<text x="81" y="542" font-size="15" style="fill:#3468C5">yt-dlp · ffmpeg</text>
+<rect x="325" y="425" width="240" height="132" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="341" y="454" font-size="20" font-weight="700" style="fill:#172E42">Transcription</text>
+<text x="341" y="481" font-size="18" style="fill:#5E7184">Words + timestamps</text>
+<text x="341" y="506" font-size="18" style="fill:#5E7184">Voice alignment</text>
+<text x="341" y="542" font-size="15" style="fill:#3468C5">faster-whisper</text>
+<path d="M280 490 L325 490" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="65" y="601" width="720" height="72" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="81" y="630" font-size="20" font-weight="700" style="fill:#172E42">Mode router</text>
+<text x="81" y="657" font-size="18" style="fill:#5E7184">Speech density + camera cuts; --mode can override</text>
+<path d="M445 557 L445 581 L425 581 L425 601" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="460" y="593" font-size="14" style="fill:#5E7184">video + timed words</text>
+<rect x="840" y="328" width="240" height="271" rx="14" fill="#F2F4F7" stroke="#D2DAE4"/>
+<text x="860" y="361" font-size="16" font-weight="700" style="fill:#5E7184">LOCAL RULES</text>
+<text x="860" y="399" font-size="20" font-weight="700" style="fill:#172E42">Editorial brief</text>
+<text x="860" y="425" font-size="17" style="fill:#3468C5">SKILL.md</text>
+<text x="860" y="463" font-size="20" font-weight="700" style="fill:#172E42">Trend briefs</text>
+<text x="860" y="489" font-size="17" style="fill:#3468C5">trends/*.md</text>
+<text x="860" y="527" font-size="20" font-weight="700" style="fill:#172E42">Campaign settings</text>
+<text x="860" y="553" font-size="17" style="fill:#3468C5">settings.local.json</text>
+<text x="860" y="582" font-size="16" style="fill:#5E7184">trends.py → briefs</text>
+<rect x="840" y="625" width="240" height="147" rx="14" fill="#F2F4F7" stroke="#D2DAE4"/>
+<text x="860" y="659" font-size="16" font-weight="700" style="fill:#5E7184">TRANSCRIPT CACHE</text>
+<text x="860" y="696" font-size="19" font-weight="700" style="fill:#172E42">*.transcript.json</text>
+<text x="860" y="727" font-size="17" style="fill:#5E7184">Reuse on the next run</text>
+<text x="860" y="751" font-size="16" style="fill:#3468C5">Local · output/&lt;video&gt;/</text>
+<path d="M565 535 L605 535 L605 575 L825 575 L825 697 L840 697" fill="none" stroke="#3468C5" stroke-width="2"/>
+<text x="660" y="566" font-size="14" style="fill:#5E7184">read / write</text>
+<rect x="65" y="699" width="26" height="24" rx="6" fill="#172E42" stroke="#172E42"/>
+<text x="73" y="716" font-size="13" font-weight="700" style="fill:#FFFFFF">2</text>
+<text x="103" y="716" font-size="15" font-weight="700" style="fill:#5E7184">SELECT A PROCESSING PATH</text>
+<path d="M425 673 L425 731 L175 731 L175 754" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M425 673 L425 731 L425 731 L425 754" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M425 673 L425 731 L675 731 L675 754" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="65" y="754" width="220" height="122" rx="12" fill="#FFF9F0" stroke="#E3C49C"/>
+<text x="81" y="783" font-size="20" font-weight="700" style="fill:#172E42">Clips</text>
+<rect x="239" y="765" width="32" height="23" rx="6" fill="#FFF0DD" stroke="#E6C39C"/>
+<text x="246" y="781" font-size="12" font-weight="700" style="fill:#A85B15">AI</text>
+<text x="81" y="810" font-size="18" style="fill:#5E7184">AI hook selection</text>
+<text x="81" y="835" font-size="18" style="fill:#5E7184">Talks / podcasts</text>
+<text x="81" y="861" font-size="15" style="fill:#3468C5">clips.py · pick_hooks()</text>
+<rect x="315" y="754" width="220" height="122" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="331" y="783" font-size="20" font-weight="700" style="fill:#172E42">Visual</text>
+<text x="331" y="810" font-size="18" style="fill:#5E7184">Energy + cut peaks</text>
+<text x="331" y="835" font-size="18" style="fill:#5E7184">Gameplay / sports</text>
+<text x="331" y="861" font-size="15" style="fill:#3468C5">pick_by_energy()</text>
+<rect x="565" y="754" width="220" height="122" rx="12" fill="#FFF9F0" stroke="#E3C49C"/>
+<text x="581" y="783" font-size="20" font-weight="700" style="fill:#172E42">Re-edit</text>
+<rect x="739" y="765" width="32" height="23" rx="6" fill="#FFF0DD" stroke="#E6C39C"/>
+<text x="746" y="781" font-size="12" font-weight="700" style="fill:#A85B15">AI</text>
+<text x="581" y="810" font-size="18" style="fill:#5E7184">AI line selection</text>
+<text x="581" y="835" font-size="18" style="fill:#5E7184">Trailers / promos</text>
+<text x="581" y="861" font-size="15" style="fill:#3468C5">reedit.py · pick_edits()</text>
+<rect x="65" y="900" width="220" height="86" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="81" y="929" font-size="20" font-weight="700" style="fill:#172E42">Validate</text>
+<text x="81" y="956" font-size="18" style="fill:#5E7184">Sentence / length / overlap</text>
+<rect x="315" y="900" width="220" height="86" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="331" y="929" font-size="20" font-weight="700" style="fill:#172E42">Candidate windows</text>
+<text x="331" y="956" font-size="18" style="fill:#5E7184">Peak-led segments</text>
+<rect x="565" y="900" width="220" height="86" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="581" y="929" font-size="20" font-weight="700" style="fill:#172E42">Story assembly</text>
+<text x="581" y="956" font-size="18" style="fill:#5E7184">Hook → build → payoff</text>
+<path d="M175 876 L175 900" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M425 876 L425 900" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M675 876 L675 900" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M175 986 L175 1012 L300 1012 L300 1034" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M425 986 L425 1012 L300 1012" fill="none" stroke="#3468C5" stroke-width="2"/>
+<rect x="65" y="1034" width="470" height="114" rx="12" fill="#FFF9F0" stroke="#E3C49C"/>
+<text x="81" y="1063" font-size="20" font-weight="700" style="fill:#172E42">Hook ranking</text>
+<rect x="489" y="1045" width="32" height="23" rx="6" fill="#FFF0DD" stroke="#E6C39C"/>
+<text x="496" y="1061" font-size="12" font-weight="700" style="fill:#A85B15">AI</text>
+<text x="81" y="1090" font-size="18" style="fill:#5E7184">Voice + picture + category weights</text>
+<text x="81" y="1115" font-size="18" style="fill:#5E7184">AI review of 3 phone-cropped frames</text>
+<text x="81" y="1133" font-size="15" style="fill:#3468C5">score.py · category() / rank()</text>
+<path d="M675 986 L675 1187 L425 1187" fill="none" stroke="#3468C5" stroke-width="2"/>
+<text x="574" y="1080" font-size="16" style="fill:#5E7184">New line order</text>
+<text x="574" y="1105" font-size="16" style="fill:#5E7184">Skips ranking</text>
+<path d="M300 1148 L300 1187 L425 1187 L425 1239" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="840" y="824" width="240" height="281" rx="14" fill="#FFF5E7" stroke="#D8B98F" stroke-dasharray="6 5"/>
+<text x="860" y="859" font-size="16" font-weight="700" style="fill:#A85B15">EXTERNAL SERVICE</text>
+<text x="860" y="899" font-size="26" font-weight="700" style="fill:#172E42">NYO API</text>
+<text x="860" y="930" font-size="19" style="fill:#A85B15">glm-5.3-flash</text>
+<text x="860" y="966" font-size="17" style="fill:#5E7184">Text + frame requests</text>
+<text x="860" y="996" font-size="17" style="fill:#5E7184">AI-tagged modules</text>
+<text x="860" y="1022" font-size="17" style="fill:#5E7184">use this endpoint.</text>
+<text x="860" y="1067" font-size="17" style="fill:#A85B15">--no-ai: visual only</text>
+<path d="M810 801 L825 801 L825 941 L840 941" fill="none" stroke="#A85B15" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#aiarrow)"/>
+<text x="850" y="804" font-size="14" style="fill:#A85B15">AI dependency</text>
+<rect x="840" y="1131" width="240" height="159" rx="14" fill="#F2F4F7" stroke="#D2DAE4"/>
+<text x="860" y="1165" font-size="16" font-weight="700" style="fill:#5E7184">SHARED INPUTS</text>
+<text x="860" y="1200" font-size="17" style="fill:#172E42">Rules → AI selection</text>
+<text x="860" y="1227" font-size="17" style="fill:#172E42">Settings → run limits</text>
+<text x="860" y="1254" font-size="17" style="fill:#172E42">Trends → hook brief</text>
+<rect x="65" y="1203" width="26" height="24" rx="6" fill="#172E42" stroke="#172E42"/>
+<text x="73" y="1220" font-size="13" font-weight="700" style="fill:#FFFFFF">3</text>
+<text x="103" y="1220" font-size="15" font-weight="700" style="fill:#5E7184">RENDER &amp; VERIFY</text>
+<rect x="65" y="1239" width="220" height="96" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="81" y="1268" font-size="20" font-weight="700" style="fill:#172E42">Shot framing</text>
+<text x="81" y="1295" font-size="18" style="fill:#5E7184">Crop / split / pad</text>
+<text x="81" y="1320" font-size="15" style="fill:#3468C5">OpenCV · YuNet</text>
+<rect x="315" y="1239" width="220" height="96" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="331" y="1268" font-size="20" font-weight="700" style="fill:#172E42">Timed captions</text>
+<text x="331" y="1295" font-size="18" style="fill:#5E7184">Word highlighting</text>
+<text x="331" y="1320" font-size="15" style="fill:#3468C5">ASS · Montserrat</text>
+<rect x="565" y="1239" width="220" height="96" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="581" y="1268" font-size="20" font-weight="700" style="fill:#172E42">Video assembly</text>
+<text x="581" y="1295" font-size="18" style="fill:#5E7184">Re-edit cross-fades</text>
+<text x="581" y="1320" font-size="15" style="fill:#3468C5">FFmpeg · −14 LUFS</text>
+<path d="M425 1239 L425 1230 L175 1230 L175 1239" fill="none" stroke="#3468C5" stroke-width="2"/>
+<path d="M425 1230 L675 1230 L675 1239" fill="none" stroke="#3468C5" stroke-width="2"/>
+<path d="M175 1335 L175 1355 L425 1355" fill="none" stroke="#3468C5" stroke-width="2"/>
+<path d="M425 1335 L425 1355 L425 1355" fill="none" stroke="#3468C5" stroke-width="2"/>
+<path d="M675 1335 L675 1355 L425 1355" fill="none" stroke="#3468C5" stroke-width="2"/>
+<rect x="245" y="1372" width="360" height="56" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="261" y="1401" font-size="20" font-weight="700" style="fill:#172E42">Verify picture / sound / length</text>
+<path d="M425 1355 L425 1372" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M425 1428 L425 1475" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="40" y="1475" width="1040" height="142" rx="14" fill="#EAF4EE" stroke="#ABCAB8"/>
+<text x="60" y="1505" font-size="16" font-weight="700" style="fill:#3D7554">LOCAL OUTPUTS</text>
+<text x="60" y="1540" font-size="22" font-weight="700" style="fill:#172E42">Clips / visual</text>
+<text x="60" y="1569" font-size="18" style="fill:#5E7184">01-*.mp4 · *.txt · report.md · review.png</text>
+<text x="610" y="1540" font-size="22" font-weight="700" style="fill:#172E42">Re-edits → reedit/</text>
+<text x="610" y="1569" font-size="18" style="fill:#5E7184">A / B / C shorts · *.txt · report.md</text>
+<text x="610" y="1597" font-size="16" style="fill:#5E7184">compare.mp4 when a prior clip exists</text>
+<text x="40" y="1650" font-size="16" style="fill:#5E7184">Solid arrows: local data flow     AI badges: NYO dependency     Dashed boundary: external API</text>
+</svg>

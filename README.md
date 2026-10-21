@@ -10,13 +10,15 @@ Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Sho
 - **Learns from winners.** `trends.py` measures the most-viewed Shorts of a channel or hashtag, and the AI picks clips that open the same way.
 - **Cheap.** Transcription and editing run on your computer for free. Only the AI pick is paid: about **1–2 US cents per video**.
 
+## Architecture
+
 <p align="center">
-  <a href="docs/ARCHITECTURE.md">
-    <img src="docs/architecture/overview.png" width="720" alt="Four steps: bring a video; read speech, timing and scene cuts; select talk moments, reorder trailers or detect visual peaks; frame, caption and check vertical clips.">
+  <a href="docs/architecture/system.svg">
+    <img src="docs/architecture/system.svg" width="1000" alt="Clipper architecture: video ingestion, local transcription and cache, clips/visual/re-edit branches, ranking, shared rendering and verification, local outputs, configuration, and external NYO AI service.">
   </a>
 </p>
 
-Detailed pipeline and collaboration diagrams: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+Component details and collaboration workflow: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 
 It runs on **Windows, macOS and Linux**, either by itself or with an AI coding agent (**OpenCode**, **Hermes**, Claude Code, Codex). The agent reads the same rules either way.
 

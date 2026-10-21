@@ -3,6 +3,13 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-21 — README component architecture
+- Replaced the README's simplified illustration with a detailed system diagram:
+  local components, three mode paths, cache, shared rendering, AI boundary and outputs.
+- Preserved the illustration on `docs/VISUAL-OVERVIEW.md`.
+- Added a dependency-free SVG renderer and included its output in the existing
+  diagram freshness check. Verified paths and conditional outputs against the code.
+
 ## 2026-10-21 — illustrated README overview
 - Replaced the README's text-heavy diagram with a custom four-step illustration:
   source video, timed speech, three selection modes and captioned phone previews.

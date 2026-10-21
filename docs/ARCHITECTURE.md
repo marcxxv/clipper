@@ -1,8 +1,18 @@
 # Architecture
 
-Two portrait diagrams, read from top to bottom. The pictures are generated from the `.d2` text files next to them, so they're easy to keep current. Numbered cards show the main flow; side-by-side cards show alternatives without crossing connectors.
+The README showcases the system's components and data paths. Supporting D2 diagrams below explain the pipeline stages and collaboration workflow.
 
-## 1. How a video becomes clips
+## 1. System architecture
+
+![Clipper system architecture](architecture/system.svg)
+
+The local engine contains ingestion, transcription, three mode paths, rendering and verification. Clips and visual candidates converge at ranking; re-edits assemble a new line order and bypass that scorer. The render row groups shared components rather than implying three independent services.
+
+The right column separates local support files from the external NYO service. AI badges identify modules that use the shared `_ask()` / `chat()` adapters in `clips.py`; the dashed connector represents that dependency, not a fourth processing path. `--no-ai` skips paid scoring in visual mode. `compare.mp4` is generated only when a prior continuous clip exists.
+
+The SVG has a fixed layout so branch paths, component boundaries and labels stay aligned. Its editable source is `architecture/render-system.py`, which uses Python's standard library. `bash docs/architecture/render.sh` regenerates it along with the D2 diagrams; `--check` validates all three images.
+
+## 2. How a video becomes clips
 
 ![pipeline](architecture/pipeline.svg)
 
@@ -29,36 +39,25 @@ The seven stages map to the code:
 
 Re-edits bypass ranking: they assemble lines into a new story, then render and verify each short. Their outputs live in `output/<video>/reedit/`, including `compare.mp4`; continuous clips get best-first numbering and `review.png`.
 
-## 2. Who runs it, and how improvements travel
+## 3. Who runs it, and how improvements travel
 
 ![collaboration](architecture/collaboration.svg)
 
 Every agent reads the same rules (`AGENTS.md`, `.agents/skills/clipping/`). The owner's agent pushes straight to `main`. A collaborator's agent opens a pull request by itself for tested, general improvements. Every push and pull request runs the Windows + Linux checks. Owner pushes reach `main` before those checks complete; collaborator pull requests are merged after passing checks.
 
-## README visual overview
+## Additional illustration
 
-The README uses [an illustrated four-step overview](architecture/overview.png) so readers can understand the product before reading the detailed diagrams. The source video, waveform and phone previews are illustrations, not pipeline screenshots. It groups transcription and analysis into one step, and selection and ranking into another; the mode-specific details remain above.
-
-Rebuild it from the repository root with Python and Pillow:
-
-```sh
-python -m pip install Pillow==11.3.0
-python docs/architecture/render-overview.py
-```
-
-The renderer uses the bundled, licensed fonts in `docs/architecture/fonts/`; no API or paid graphics service is required. Commit the renderer and regenerated PNG together. Check the image at the README's 720-pixel display width after edits. This illustration is maintained separately from the D2 source/image check.
-
-Design direction: [Signal to Story](architecture/visual-direction.md).
+The simpler product illustration is preserved on [Visual overview](VISUAL-OVERVIEW.md), with its renderer and design notes. The README uses the system architecture above.
 
 ## Keeping the diagrams current
 
 When a feature, step, mode or flow changes:
 
-1. edit `docs/architecture/pipeline.d2` or `collaboration.d2` (plain text; syntax at https://d2lang.com);
+1. edit `docs/architecture/render-system.py` for the component architecture, or `pipeline.d2` / `collaboration.d2` for the supporting diagrams (D2 syntax at https://d2lang.com);
 2. run `bash docs/architecture/render.sh` to regenerate the `.svg` files;
 3. commit both the `.d2` and the `.svg`.
 
-The `checks` workflow re-renders the diagrams and **fails if an `.svg` doesn't match its `.d2`**, so a forgotten re-render can't slip through.
+The `checks` workflow re-renders the diagrams and **fails if an `.svg` doesn't match its source**, so a forgotten re-render can't slip through.
 
 Install D2 to render: `brew install d2` (macOS), `winget install terrastruct.d2` (Windows), or https://d2lang.com/tour/install. The renderer is pinned to **v0.9.0** so everyone produces identical images.
 
