@@ -34,7 +34,7 @@ Newest first. Every change to code, settings, rules or docs gets a dated entry h
 - Removed a machine-specific ffmpeg path and personal log references; examples use placeholder channels.
 - `AGENTS.md`: agents on forks or without push access keep changes local instead of opening pull requests.
 - Commit author emails rewritten to the GitHub no-reply address.
-- README: Contributors section (@marcxxv, @blame-zeus).
+- README: Contributors section (@marcxxv as maintainer; @blame-zeus as contributor and source of the idea).
 
 ## 2026-10-21 — hook scoring, trends, automatic git workflow
 - `score.py`: every candidate's first 3 s scored on voice (energy, pitch variation, pace,
