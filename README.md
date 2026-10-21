@@ -10,7 +10,11 @@ Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Sho
 - **Learns from winners.** `trends.py` measures the most-viewed Shorts of a channel or hashtag, and the AI picks clips that open the same way.
 - **Cheap.** Transcription and editing run on your computer for free. Only the AI pick is paid: about **1–2 US cents per video**.
 
-![how it works](docs/architecture/pipeline.svg)
+<p align="center">
+  <a href="docs/architecture/pipeline.svg">
+    <img src="docs/architecture/pipeline.svg" width="720" alt="Clipper pipeline: source, transcription, mode selection, story selection, clip ranking, framing and verified output. Re-edits skip ranking.">
+  </a>
+</p>
 
 More diagrams, including how changes travel between people: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
 

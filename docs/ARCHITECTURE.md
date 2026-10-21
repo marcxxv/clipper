@@ -1,6 +1,6 @@
 # Architecture
 
-Two diagrams. The pictures are generated from the `.d2` text files next to them, so they're easy to keep current.
+Two portrait diagrams, read from top to bottom. The pictures are generated from the `.d2` text files next to them, so they're easy to keep current. Numbered cards show the main flow; side-by-side cards show alternatives without crossing connectors.
 
 ## 1. How a video becomes clips
 
@@ -8,28 +8,32 @@ Two diagrams. The pictures are generated from the `.d2` text files next to them,
 
 | Colour | Meaning |
 |---|---|
-| blue | runs on your computer, free |
-| amber (hexagon) | an AI step, costs cents |
-| green | what you get |
-| grey | shared rule files |
+| white | shared processing stages |
+| blue | local moment selection |
+| amber | AI moment selection |
+| green | deliverables |
+
+Transcription and rendering run locally. Ranking uses paid AI frame review unless `--no-ai` is set in visual mode. The shared editorial brief, optional trend briefs and personal campaign settings are listed below the flow rather than connected by long arrows.
 
 The seven stages map to the code:
 
 | Stage | Code |
 |---|---|
-| 1 · In | `download()` in `pipeline/clips.py` |
-| 2 · Listen | `transcribe()`, `refine_timing()` |
-| 3 · Understand | `profile()`, `score.category()` |
-| 4 · Pick | `pick_hooks()` + `_validate()`, `reedit.py`, `pick_by_energy()` |
-| 5 · Rank | `pipeline/score.py` |
-| 6 · Make | `frame_filter()`, `captions()`, `render()`, `verify()` |
-| 7 · You get | `contact_sheet()`, `post_text()`, the report in `main()` |
+| 1 · Source | `download()` in `pipeline/clips.py` |
+| 2 · Transcribe | `transcribe()`, `refine_timing()` |
+| 3 · Choose a mode | `profile()` (or `--mode`) |
+| 4 · Find the story | `pick_hooks()` + `_validate()`, `reedit.py`, `pick_by_energy()` |
+| 5 · Rank | `score.category()` and `score.rank()` in `pipeline/score.py`; clips and visual modes only |
+| 6 · Frame & finish | `frame_filter()`, `captions()`, `render()`, `verify()` |
+| 7 · Review your output | `contact_sheet()`, `post_text()`, the report in `main()` |
+
+Re-edits bypass ranking: they assemble lines into a new story, then render and verify each short. Their outputs live in `output/<video>/reedit/`, including `compare.mp4`; continuous clips get best-first numbering and `review.png`.
 
 ## 2. Who runs it, and how improvements travel
 
 ![collaboration](architecture/collaboration.svg)
 
-Every agent reads the same rules (`AGENTS.md`, `.agents/skills/clipping/`). The owner's agent pushes straight to `main`. A collaborator's agent opens a pull request by itself for tested, general improvements. Every push and pull request runs the Windows + Linux checks.
+Every agent reads the same rules (`AGENTS.md`, `.agents/skills/clipping/`). The owner's agent pushes straight to `main`. A collaborator's agent opens a pull request by itself for tested, general improvements. Every push and pull request runs the Windows + Linux checks. Owner pushes reach `main` before those checks complete; collaborator pull requests are merged after passing checks.
 
 ## Keeping the diagrams current
 

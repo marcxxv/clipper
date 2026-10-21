@@ -3,6 +3,12 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-21 — portrait architecture refresh
+- Redesigned both D2 diagrams as numbered portrait flows with a restrained palette,
+  consistent cards and no crossing connectors. Updated the README image presentation.
+- Clarified that re-edits skip clip ranking and produce a separate set of outputs;
+  kept the diagrams and architecture guide aligned with the existing code.
+
 ## 2026-10-21 — architecture diagrams
 - `docs/ARCHITECTURE.md` with two D2 diagrams (pipeline; people, agents and GitHub flow),
   shown in the README. Sources in `docs/architecture/*.d2`, rendered by `render.sh`
