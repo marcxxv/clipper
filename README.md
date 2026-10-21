@@ -158,6 +158,13 @@ Agents follow `AGENTS.md`:
 
 Everyone gets updates with `git pull`.
 
+## Contributors
+
+- [@marcxxv](https://github.com/marcxxv): author and maintainer
+- [@blame-zeus](https://github.com/blame-zeus): collaborator
+
+Pull requests are welcome.
+
 ## Licence and disclaimer
 
 The code is released under the [MIT licence](LICENSE). Third-party parts and their licences: [THIRD-PARTY.md](THIRD-PARTY.md).
