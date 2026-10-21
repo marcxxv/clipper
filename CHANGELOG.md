@@ -3,6 +3,11 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-21 — architecture diagrams
+- `docs/ARCHITECTURE.md` with two D2 diagrams (pipeline; people, agents and GitHub flow),
+  shown in the README. Sources in `docs/architecture/*.d2`, rendered by `render.sh`
+  (D2 v0.9.0). CI fails if a diagram image is out of date.
+
 ## 2026-10-21 — hook scoring, trends, automatic git workflow
 - `score.py`: every candidate's first 3 s scored on voice (energy, pitch variation, pace,
   dead air), picture (face, motion, cuts) and an AI look at the phone-cropped frames

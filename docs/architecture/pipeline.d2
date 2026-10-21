@@ -1,0 +1,136 @@
+# clipper — the pipeline. Source of docs/architecture/pipeline.svg
+# Edit this file when a step, mode or flow changes, then run:
+#   bash docs/architecture/render.sh
+# (CI fails if the SVG is out of date.)
+
+vars: {
+  d2-config: {
+    layout-engine: elk
+    theme-id: 0
+    pad: 40
+  }
+}
+direction: down
+
+classes: {
+  free: {
+    style: {fill: "#EAF2FF"; stroke: "#3B6FD8"; stroke-width: 2; border-radius: 10; font-color: "#1B2F5E"}
+  }
+  ai: {
+    shape: hexagon
+    style: {fill: "#FFF1D6"; stroke: "#D98A00"; stroke-width: 2; font-color: "#5A3A00"}
+  }
+  out: {
+    shape: page
+    style: {fill: "#E6F7EC"; stroke: "#1E9E55"; stroke-width: 2; font-color: "#0E4A28"}
+  }
+  rule: {
+    shape: document
+    style: {fill: "#F2F2F4"; stroke: "#8A8A99"; stroke-width: 2; font-color: "#333344"}
+  }
+  stage: {
+    style: {fill: "#FFFFFF"; stroke: "#C9CEDA"; stroke-width: 2; stroke-dash: 4; border-radius: 16; font-size: 22; bold: true; font-color: "#2A2F3C"}
+  }
+  decision: {
+    shape: diamond
+    style: {fill: "#EAF2FF"; stroke: "#3B6FD8"; stroke-width: 2; font-color: "#1B2F5E"}
+  }
+}
+
+title: |md
+  # clipper — how a video becomes clips
+  blue = free, on your computer · amber = AI step (cents) · green = what you get · grey = shared rules
+| {near: top-center}
+
+input: 1 · IN {
+  class: stage
+  direction: right
+  src: "YouTube link\nor video file" {class: free; shape: oval}
+  dl: "download\nbest copy ≤ 1080p\n(yt-dlp)" {class: free}
+  src -> dl
+}
+
+listen: 2 · LISTEN {
+  class: stage
+  direction: right
+  asr: "transcribe every word\nwith its timing\n(faster-whisper, local)" {class: free}
+  snap: "snap timings to the voice\npauses · loudness dips\n(±20 ms)" {class: free}
+  cache: "transcript cache" {shape: cylinder; class: free}
+  asr -> snap -> cache
+}
+
+understand: 3 · UNDERSTAND {
+  class: stage
+  direction: right
+  profile: "measure\nwords/min · cuts/min\nlanguage · resolution" {class: free}
+  mode: "which\nmode?" {class: decision}
+  cat: "category\npodcast · gaming · …\n(or --category=)" {class: ai}
+  profile -> mode
+  profile -> cat
+}
+
+pick: 4 · PICK MOMENTS {
+  class: stage
+  direction: right
+  talk: "AI picks strongest\nmoments from the\nsentence transcript" {class: ai}
+  story: "AI re-orders lines\nhook → build → payoff" {class: ai}
+  energy: "loudness peaks\n+ fast cutting" {class: free}
+  checks: "quality checks\nclean sentence start/end\nno filler · no overlap\n(too few pass → AI asked again, ≤3 rounds)" {class: free}
+  talk -> checks
+  energy -> checks
+}
+
+rank: 5 · RANK {
+  class: stage
+  direction: right
+  voice: "voice\nenergy · pitch · pace\ndead air" {class: free}
+  pic: "picture\nface · motion · cuts" {class: free}
+  look: "AI looks at\n3 phone-view frames" {class: ai}
+  score: "hook score\nweighted by category\nbest first" {class: free}
+  voice -> score
+  pic -> score
+  look -> score
+}
+
+make: 6 · MAKE {
+  class: stage
+  direction: right
+  frame: "frame each camera shot\nface crop · 2-person split\n· padded wide shot" {class: free}
+  caps: "karaoke captions\nword lights up as spoken\nclears in pauses" {class: free}
+  mix: "cross-fades (re-edit)\nloudness -14 LUFS" {class: free}
+  verify: "check every file\npicture = sound = plan" {class: free}
+  frame -> caps -> mix -> verify
+}
+
+result: 7 · YOU GET {
+  class: stage
+  direction: right
+  clips: "01-…mp4 best first\n1080×1920" {class: out}
+  txt: "01-…txt\ntitle + hashtags" {class: out}
+  report: "report.md\nscores · reasons" {class: out}
+  sheet: "review.png\nall clips at a glance" {class: out}
+}
+
+rules: SHARED RULES {
+  class: stage
+  direction: right
+  skill: "SKILL.md\neditorial brief\n(one copy)" {class: rule}
+  trends: "trends/*.md\nhow winners open" {class: rule}
+  tpy: "trends.py\nmeasures a niche's\ntop Shorts" {class: free}
+  local: "settings.local.json\ncampaign lengths" {class: rule}
+  tpy -> trends
+}
+
+input.dl -> listen.asr
+listen.cache -> understand.profile
+understand.mode -> pick.talk: talk · podcast
+understand.mode -> pick.story: trailer · promo
+understand.mode -> pick.energy: gaming · sports · music
+understand.cat -> rank.score: weights
+pick.checks -> rank: survivors
+pick.story -> make.frame: lines in new order
+rank.score -> make.frame: top clips
+make.verify -> result
+rules.skill -> pick.talk: brief {style.stroke: "#8A8A99"}
+rules.trends -> pick.talk: --trend= {style.stroke: "#8A8A99"}
+rules.local -> pick.checks: lengths {style.stroke: "#8A8A99"}

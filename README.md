@@ -10,6 +10,10 @@ Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Sho
 - **Learns from winners.** `trends.py` measures the most-viewed Shorts of a channel or hashtag, and the AI picks clips that open the same way.
 - **Cheap.** Transcription and editing run on your computer for free. Only the AI pick is paid: about **1–2 US cents per video**.
 
+![how it works](docs/architecture/pipeline.svg)
+
+More diagrams, including how changes travel between people: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+
 It runs on **Windows, macOS and Linux**, either by itself or with an AI coding agent (**OpenCode**, **Hermes**, Claude Code, Codex). The agent reads the same rules either way.
 
 ---
@@ -133,7 +137,7 @@ clipper/
 ├── .github/workflows/        checks: Windows + Linux install and test on every change
 ├── setup/                    setup.ps1 (Windows), setup.sh (macOS / Linux)
 ├── integrations/             ready-made configs for OpenCode and Hermes
-├── docs/                     SETUP, OPENCODE, HERMES, HOW-IT-WORKS
+├── docs/                     SETUP, OPENCODE, HERMES, HOW-IT-WORKS, ARCHITECTURE (+ architecture/*.d2 diagrams)
 ├── sources/                  your input videos (not committed)
 └── output/                   results (not committed)
 ```

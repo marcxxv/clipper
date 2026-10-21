@@ -1,7 +1,7 @@
 ---
 name: clipping
 description: "Run the clipper pipeline (any video or YouTube link to vertical captioned shorts) and apply its editorial rules: pick hooks, write titles, check clips before publishing."
-version: 2.1.0
+version: 2.2.0
 ---
 
 # Clipping
@@ -140,7 +140,9 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
 
 ## Keeping records (every change)
 
-1. Update `README.md` / `docs/` if behaviour or settings changed.
+1. Update `README.md` / `docs/` if behaviour or settings changed; for a new
+   step, mode or flow, update `docs/architecture/*.d2` and run
+   `bash docs/architecture/render.sh`.
 2. Update this skill if a rule or how-to changed.
 3. Add a dated line to `CHANGELOG.md`.
 4. Share it through git as `AGENTS.md` says: the owner pushes to `main`;

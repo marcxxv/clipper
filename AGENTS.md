@@ -21,7 +21,7 @@ Read by OpenCode, Hermes (`clipper` profile), Claude Code and Codex.
 - Commit or print `.env` or any key.
 
 ## Keeping records (every change to code, settings, rules or docs)
-1. Update `README.md` / `docs/` if behaviour or settings changed.
+1. Update `README.md` / `docs/` if behaviour or settings changed. If a step, mode or flow changed, also update the diagram in `docs/architecture/*.d2` and run `bash docs/architecture/render.sh` (CI fails if the picture is out of date).
 2. Update `.agents/skills/clipping/SKILL.md` if a rule or how-to changed. It's the only copy; every agent and the pipeline read it.
 3. Add a dated entry to `CHANGELOG.md`.
 4. Share it through git, automatically, as below.
