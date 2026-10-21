@@ -161,7 +161,7 @@ Everyone gets updates with `git pull`.
 ## Contributors
 
 - [@marcxxv](https://github.com/marcxxv): author and maintainer
-- [@blame-zeus](https://github.com/blame-zeus): contributor, regular user, and the source of the idea for clipper
+- [@blame-zeus](https://github.com/blame-zeus): contributor; a conversation about his clipping work inspired this project
 
 Pull requests are welcome.
 
