@@ -4,6 +4,8 @@ sources/*
 !sources/.gitkeep
 output/*
 !output/.gitkeep
+trends/*
+!trends/.gitkeep
 archive/
 opencode.json
 

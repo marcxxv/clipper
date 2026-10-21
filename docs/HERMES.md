@@ -29,7 +29,7 @@ Because of the links, a `git pull` updates the agent too. There's one copy of th
 
 ## Changing things
 
-Change the skill, docs or code **in the repo**, then commit and push (see `AGENTS.md`). If you also changed the profile itself (model, tools), note it in `~/.hermes/CONFIG-CHANGES.md` if you keep that log.
+Change the skill, docs or code **in the repo**, then commit and push (see `AGENTS.md`).
 
 ## Windows
 

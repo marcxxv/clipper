@@ -10,4 +10,6 @@
 | OpenCV, NumPy, requests, yt-dlp | installed at setup | Apache-2.0, BSD, Apache-2.0, Unlicense |
 | ffmpeg | installed at setup | LGPL/GPL (system install) |
 
+This project's own code is MIT-licensed (`LICENSE`); the table covers parts it bundles or installs.
+
 Videos you process belong to their owners. Only clip footage you own or are licensed to use.

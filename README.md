@@ -139,7 +139,7 @@ clipper/
 ├── CHANGELOG.md              what changed, newest first
 ├── .agents/skills/clipping/  the clipping skill: editorial rules + how to run
 ├── pipeline/                 clips.py, reedit.py, score.py, trends.py, check_captions.py, fonts/, models/
-├── trends/                   briefs written by trends.py (shared)
+├── trends/                   briefs written by trends.py (yours, not committed)
 ├── .github/workflows/        checks: Windows + Linux install and test on every change
 ├── setup/                    setup.ps1 (Windows), setup.sh (macOS / Linux)
 ├── integrations/             ready-made configs for OpenCode and Hermes
@@ -152,9 +152,14 @@ clipper/
 
 Agents follow `AGENTS.md`:
 - **The owner's agent** commits and pushes improvements to `main` automatically.
-- **A collaborator's agent** never touches `main`, which is protected. When it improves the shared pipeline while doing your task, it opens a **pull request** by itself, with what changed, why, and how it was tested, and tells you the link. Personal settings stay local.
+- **An invited collaborator's agent** never touches `main`, which is protected. When it improves the shared pipeline while doing your task, it opens a **pull request** by itself, with what changed, why, and how it was tested, and tells you the link. Personal settings stay local.
+- **Everyone else** (forks, visitors): your agent keeps changes local and opens a pull request only if you ask. Pull requests from anyone are welcome.
 - Every push and pull request runs the **checks**: a real install plus an offline test run on Windows and Linux.
 
 Everyone gets updates with `git pull`.
 
-Third-party parts and their licences: [THIRD-PARTY.md](THIRD-PARTY.md).
+## Licence and disclaimer
+
+The code is released under the [MIT licence](LICENSE). Third-party parts and their licences: [THIRD-PARTY.md](THIRD-PARTY.md).
+
+clipper is an independent project. It is not affiliated with or endorsed by Whop, YouTube, TikTok, Instagram, OpenAI, Nous Research or NYO. Downloading videos and posting clips can be restricted by a platform's terms and by copyright; you are responsible for what you process and publish.

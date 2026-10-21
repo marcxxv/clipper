@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """trends.py — learn what the most-viewed Shorts on a topic do in their first seconds.
 
-  python pipeline/trends.py "@JordanBPeterson, @ChrisWillx"   # channels (best: on-topic)
+  python pipeline/trends.py "@SomeChannel, @AnotherChannel"   # channels (best: on-topic)
   python pipeline/trends.py "stoicism, mindset"                # hashtags (noisier)
-  python pipeline/clips.py "<video>" --trend=jordanbpeterson-chriswillx
+  python pipeline/clips.py "<video>" --trend=somechannel-anotherchannel
 
 Finds the most-viewed YouTube Shorts from those channels / hashtag pages, downloads only their first
 SNIP_S seconds (deleted after measuring), and measures the same signals the scorer

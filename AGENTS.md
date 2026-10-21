@@ -36,7 +36,9 @@ Who is working? Compare `gh api user --jq .login` with the repo owner (`gh repo 
 
 **Owner:** after a change is tested, commit and `git push` to `main` right away. Use a clear message saying what changed and why.
 
-**Anyone else (collaborator):** `main` is protected; never try to push to it. While doing the user's task, you may improve the shared pipeline: fix a bug, handle a new kind of video, make clips better for everyone. When that happens and the change is tested:
+**Anyone else:** `main` is protected; never try to push to it. This repository is public, so most people are not invited collaborators. Check `gh api repos/{owner}/{repo} --jq .permissions.push`:
+- **`false` (a fork or a stranger):** keep every change local. Do not open a pull request unless the user asks for one.
+- **`true` (an invited collaborator):** while doing the user's task, you may improve the shared pipeline: fix a bug, handle a new kind of video, make clips better for everyone. When that happens and the change is tested:
 1. `git switch -c improve/<short-name>`, commit with a clear message;
 2. `git push -u origin improve/<short-name>`;
 3. `gh pr create --base main` with a short body: **what** changed, **why** (what went wrong or what's better), and **how it was tested** (commands run, results);

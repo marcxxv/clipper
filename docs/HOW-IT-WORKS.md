@@ -62,7 +62,7 @@ python pipeline/clips.py "<video>" --trend=channelname-another
 
 It lists the most-viewed Shorts of each channel's Shorts tab or hashtag page and downloads only the first 8 seconds of each (deleted after measuring). It measures the same signals as the scorer, plus the opening line, and writes `trends/<name>.md`: typical length, pace, dead air, face share, and example openings. With `--trend=`, that brief is added to the AI's instructions, so it prefers moments that open the way current winners do. It's free (no AI requests) and takes about 2 minutes.
 
-Use channels in your niche. Broad hashtags like `#motivation` are dominated by music and visual Shorts, and the brief warns when a source has few talking Shorts. Example from `@JordanBPeterson`: all 12 top Shorts start speaking in the first frame at about 3.2 words/s with no dead air, about 40 s long, 9 of 12 on a visible face. Openings speak directly to the viewer ("Are you…", "Imagine that you're…").
+Use channels in your niche. Broad hashtags like `#motivation` are dominated by music and visual Shorts, and the brief warns when a source has few talking Shorts. In a typical talking niche, the top Shorts start speaking in the first frame at about 3 words/s with no dead air, run about 40 s, and open on a visible face, with openings that speak directly to the viewer ("Are you…", "Imagine that you're…"). Your own brief shows the real numbers for your niche.
 
 ## Re-editing (`reedit` mode)
 

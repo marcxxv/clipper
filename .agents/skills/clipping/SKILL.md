@@ -149,4 +149,3 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
    anyone else opens a pull request automatically for tested, general
    improvements.
 
-Hermes users also log agent/profile changes in `~/.hermes/CONFIG-CHANGES.md`.

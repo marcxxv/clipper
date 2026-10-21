@@ -28,6 +28,13 @@ Newest first. Every change to code, settings, rules or docs gets a dated entry h
   shown in the README. Sources in `docs/architecture/*.d2`, rendered by `render.sh`
   (D2 v0.9.0). CI fails if a diagram image is out of date.
 
+## 2026-10-22 — prepared for public release
+- Added the MIT `LICENSE`; README licence and disclaimer section.
+- Removed the committed `trends/` example (a real creator's measured Shorts); `trends/` is now git-ignored, since briefs are generated per user.
+- Removed a machine-specific ffmpeg path and personal log references; examples use placeholder channels.
+- `AGENTS.md`: agents on forks or without push access keep changes local instead of opening pull requests.
+- Commit author emails rewritten to the GitHub no-reply address.
+
 ## 2026-10-21 — hook scoring, trends, automatic git workflow
 - `score.py`: every candidate's first 3 s scored on voice (energy, pitch variation, pace,
   dead air), picture (face, motion, cuts) and an AI look at the phone-cropped frames

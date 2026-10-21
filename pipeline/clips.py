@@ -90,7 +90,6 @@ USED = {"model": None}
 def _find_ffmpeg():
     """Prefer a build that has libass (needed to burn captions)."""
     cands = [os.environ.get("CLIPS_FFMPEG", ""),
-             str(Path.home() / ".hermes/tools/ffmpeg-9.0.1-darwin-arm64/ffmpeg"),
              "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg",     # Homebrew's build with libass
              "/usr/local/opt/ffmpeg-full/bin/ffmpeg",
              "/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg", shutil.which("ffmpeg") or ""]
