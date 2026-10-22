@@ -92,6 +92,7 @@ Or just ask your agent: *"clip this: https://youtu.be/…"*.
 | `report.md` | each clip's score and strengths, start, length, framing, title, real opening words, and why it was picked |
 | `review.png` | one frame per clip, to check them all at a glance |
 | `reedit/` | for trailers: shorts `A-`, `B-`, `C-`, their line order, and `compare.mp4` (old cut, then new) |
+| `history/run-*/` | prior deliverables preserved when you rerun the same video; re-edit history is inside `reedit/history/` |
 
 ### The three modes (chosen automatically)
 
@@ -115,6 +116,12 @@ Languages: the language is detected automatically, and titles and hashtags come 
 | No agent | — | the commands above |
 
 There is only **one copy** of the rules (`.agents/skills/clipping/SKILL.md`). Every agent, and the pipeline itself, reads that file.
+Optional private context goes in git-ignored `CONTEXT.local.md`; all agents read
+its pointers through `AGENTS.md`. Keep one working checkout per machine and
+re-run the Hermes integration after moving it. Profile sessions remain private.
+
+The hook score is an editorial aid, not a validated forecast of views or earnings.
+Current payment and platform findings: [platform research](docs/PLATFORM-RESEARCH.md).
 
 ---
 

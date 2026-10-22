@@ -66,7 +66,7 @@ text(485,360,'Python · CPU · FFmpeg',17,MUTED)
 section(65,401,'1','INGEST & UNDERSTAND')
 flow([(555,250),(555,295),(795,295),(795,412),(172,412),(172,425)])
 node(65,425,215,132,'Media loader',['Download / inspect','Decode audio'],code='yt-dlp · ffmpeg')
-node(325,425,240,132,'Transcription',['Words + timestamps','Voice alignment'],code='faster-whisper')
+node(325,425,240,132,'Transcription',['Local speech worker','Words + alignment'],code='transcribe_worker.py')
 flow([(280,490),(325,490)])
 # Entry connects directly to the media loader without crossing its heading.
 node(65,601,720,72,'Mode router',['Speech density + camera cuts; --mode can override'])

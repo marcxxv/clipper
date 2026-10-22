@@ -1,7 +1,7 @@
 ---
 name: clipping
 description: "Run the clipper pipeline (any video or YouTube link to vertical captioned shorts) and apply its editorial rules: pick hooks, write titles, check clips before publishing."
-version: 2.2.0
+version: 2.3.0
 ---
 
 # Clipping
@@ -10,6 +10,8 @@ The pipeline lives in this repository (`pipeline/clips.py`, `pipeline/reedit.py`
 This file is its single source of editorial rules. The part between the `brief`
 markers is sent to the AI on every run, so edit rules here, not in the code.
 How it works in detail: `docs/HOW-IT-WORKS.md`. Change history: `CHANGELOG.md`.
+Read the optional git-ignored `CONTEXT.local.md` for this user's private context
+pointers and current decisions. Shared research: `docs/PLATFORM-RESEARCH.md`.
 
 ## Running it
 
@@ -32,7 +34,8 @@ From the repository root. The Python inside the setup's virtual environment:
 
 - Sources go in `sources/`. Results land in `output/<video name>/`: clips,
   a `.txt` post text per clip, `report.md`, `review.png`, and `reedit/` for
-  re-edits. Each run clears that video's old clips.
+  re-edits. Reruns move prior deliverables into that folder's `history/run-*/`;
+  transcripts stay cached. Do not delete history without explicit approval.
 - After a run, read `report.md` and look at real frames (extract one with
   ffmpeg) before saying a clip is good. Lines starting with `!` are problems.
 - Clips are numbered best-first by a hook score (voice, picture, AI look,
@@ -42,6 +45,15 @@ From the repository root. The Python inside the setup's virtual environment:
   `--trend=`. Re-run it monthly; what wins changes.
 - Campaign lengths and other personal values go in `settings.local.json`
   (e.g. `{"MIN_S": 30, "MAX_S": 60}`), never in the code.
+- A local caption-capable ffmpeg can be selected with `FFMPEG_PATH` in that
+  file (or `CLIPS_FFMPEG` in the environment). Never commit a user's machine path.
+- Speech runs in `transcribe_worker.py` with the same selected Whisper model;
+  this keeps PyAV and OpenCV native libraries in separate processes on macOS.
+- After moving a checkout, run `bash integrations/hermes/install.sh --retarget`: it
+  backs up and retargets the existing profile's terminal, skill and identity,
+  including when invoked from a named profile. Other profile settings stay put.
+  Without `--retarget`, it refuses a different checkout. Its folder resolution
+  clears `CDPATH`; duplicated paths are a shell capture bug, not Hermes merging.
 - Cost: only the AI pick is paid, about 1-2 US cents a run (about 5 cents for
   a 3-hour video). Transcription runs locally and is cached.
 
@@ -125,8 +137,8 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
 ## Campaign rules come first
 
 - Each Whop Content Rewards campaign sets its own minimum length, hashtags,
-  links and platforms. Set `MIN_S`/`MAX_S` in `pipeline/clips.py` (or `TARGET`
-  in `pipeline/reedit.py`) from the brief before running. A clip that breaks
+  links and platforms. Set `MIN_S`/`MAX_S` (or re-edit `TARGET`) in
+  `settings.local.json` from the brief before running. A clip that breaks
   the brief can be rejected.
 - Turn on the platform's paid / branded-content disclosure for campaign clips.
 
@@ -145,7 +157,6 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
    `bash docs/architecture/render.sh`.
 2. Update this skill if a rule or how-to changed.
 3. Add a dated line to `CHANGELOG.md`.
-4. Share it through git as `AGENTS.md` says: the owner pushes to `main`;
-   anyone else opens a pull request automatically for tested, general
-   improvements.
+4. Follow `AGENTS.md` for Git permissions: owner, invited collaborator and
+   fork/visitor rules differ. Never publish local context, media or settings.
 

@@ -4,7 +4,7 @@
 
 ```
 video or YouTube link
-  → audio decoded, transcribed locally (faster-whisper large-v3-turbo, word timings)
+  → audio decoded, transcribed in a local worker (faster-whisper large-v3-turbo, word timings)
   → word timings snapped to the audio
   → mode chosen: clips · reedit · visual
   → the AI picks moments (NYO glm-5.3-flash, fallbacks glm-5, qwen3-30b)
@@ -13,7 +13,13 @@ video or YouTube link
   → clips + post text + report + contact sheet; every file checked
 ```
 
-Transcripts are cached in `output/<video>/<video>.transcript.json`, so re-runs skip transcription and take 1–3 minutes. Transcription runs at about 3.5× real time on a laptop CPU: roughly 8 minutes for a 28-minute video.
+Transcripts are cached in `output/<video>/<video>.transcript.json`, so re-runs skip transcription. Speech recognition runs in `pipeline/transcribe_worker.py` using the same CPU/int8 model and options; OpenCV stays in the parent process. This avoids loading competing PyAV/OpenCV AVFoundation classes together on macOS. Timing depends on hardware and source length.
+
+For a locally installed ffmpeg with caption support, use `FFMPEG_PATH` in
+`settings.local.json` or the `CLIPS_FFMPEG` environment variable. Machine paths
+stay local. A setup check validates dependencies; it does not prove clip quality.
+Reruns move previous deliverables into `history/run-*/` within the output folder
+(or `reedit/history/` for re-edits), keeping transcript caches in place.
 
 ## Choosing the mode
 
@@ -50,7 +56,11 @@ After the quality checks, every surviving candidate gets a score from its first 
 
 Signals are compared **within the video**, then weighted by **category**. A gaming or sports clip is judged on motion and energy; a podcast on voice, face and the line itself. The category is detected from the transcript (`podcast, talk, education, motivation, comedy, drama, news, gaming, sports, music, other`), or set with `--category=`. The weights are in `WEIGHTS` in `score.py`; they're reasoned starting values, to be tuned against real view counts.
 
-The score only **re-orders and chooses among clips that already passed every check**, so it can't make a clip worse. Clips are numbered best-first (`01` = highest). The report shows each score (50 = average for that video) and its two biggest strengths.
+The score only reorders and chooses among clips that already passed the checks.
+It is an unvalidated editorial heuristic, not a prediction of views or income;
+it can rank a less effective clip above a better one. Clips are numbered by this
+score (`01` = highest). The report shows each score (50 = average for that video)
+and its two biggest strengths. See [platform research](PLATFORM-RESEARCH.md).
 
 ## Learning from winners (`trends.py`)
 

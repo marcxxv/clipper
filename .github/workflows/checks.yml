@@ -43,6 +43,7 @@ jobs:
       - name: test video and offline run (Linux)
         if: runner.os == 'Linux'
         run: |
+          python3 -m unittest discover -s tests -v
           ffmpeg -v error -f lavfi -i testsrc2=s=1280x720:r=30:d=45 -f lavfi -i "sine=f=220:d=45" \
             -shortest -c:v libx264 -c:a aac sources/ci.mp4
           pipeline/.venv/bin/python pipeline/clips.py --check --no-ai

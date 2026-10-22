@@ -210,8 +210,6 @@ def run(video):
     C.OUT = C.OUTROOT / video.stem
     dest = C.OUT / "reedit"
     dest.mkdir(parents=True, exist_ok=True)
-    for old in list(dest.glob("*.mp4")) + list(dest.glob("*.txt")):
-        old.unlink()
 
     t0 = time.time()
     total = C.duration(video)
@@ -222,6 +220,8 @@ def run(video):
     edits = pick_edits(lines, total)
     if not edits:
         sys.exit("model returned no usable edit")
+
+    C.preserve_outputs(dest)
 
     work = C.ROOT / "reedit_tmp"
     work.mkdir(exist_ok=True)

@@ -89,7 +89,15 @@ USED = {"model": None}
 
 def _find_ffmpeg():
     """Prefer a build that has libass (needed to burn captions)."""
-    cands = [os.environ.get("CLIPS_FFMPEG", ""),
+    local_path = ""
+    if LOCAL.exists():
+        try:
+            local_path = json.loads(LOCAL.read_text(encoding="utf-8")).get("FFMPEG_PATH", "")
+        except (ValueError, AttributeError) as e:
+            sys.exit(f"settings.local.json must be a JSON object: {e}")
+        if not isinstance(local_path, str):
+            sys.exit("settings.local.json FFMPEG_PATH must be a path string")
+    cands = [os.environ.get("CLIPS_FFMPEG", ""), local_path,
              "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg",     # Homebrew's build with libass
              "/usr/local/opt/ffmpeg-full/bin/ffmpeg",
              "/opt/homebrew/bin/ffmpeg", "/usr/local/bin/ffmpeg", shutil.which("ffmpeg") or ""]
@@ -158,7 +166,6 @@ def frame_size(video):
 
 def transcribe(video):
     import numpy as np
-    from faster_whisper import WhisperModel
 
     cache = OUT / f"{video.stem}.transcript.json"
     if cache.exists():
@@ -177,15 +184,16 @@ def transcribe(video):
     audio = _audio(video)
 
     print(f"   transcribing {len(audio)/16000/60:.1f} min...")
-    model = WhisperModel(WHISPER, device="cpu", compute_type="int8")
-    segs, info = model.transcribe(audio, word_timestamps=True, vad_filter=True)
-    set_lang(info.language)
-    words, lines = [], []
-    for s in segs:
-        for w in (s.words or []):
-            words.append({"w": w.word.strip(), "s": float(w.start), "e": float(w.end)})
-        if s.text.strip():
-            lines.append((float(s.start), s.text.strip()))
+    # PyAV (speech) and OpenCV bundle competing macOS AVFoundation classes.
+    # Keep speech decoding in a child process; model/settings are unchanged.
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "transcribe_worker.py"), WHISPER],
+        input=np.asarray(audio, dtype="<f4").tobytes(), capture_output=True)
+    if result.returncode:
+        sys.exit("transcription failed: " + result.stderr.decode("utf-8", errors="replace")[-1200:])
+    data = json.loads(result.stdout)
+    set_lang(data["lang"])
+    words, lines = data["words"], [tuple(x) for x in data["lines"]]
     raw, words = words, refine_timing(words, audio)
     cache.write_text(json.dumps({"words": words, "raw": raw, "lines": lines,
                                  "lang": LANG, "timing": TIMING}), encoding="utf-8")
@@ -753,6 +761,19 @@ def track_expr(shots, cw, w):
 
 # ---------------- render ----------------
 
+def preserve_outputs(folder):
+    """Move prior deliverables aside on reruns; never delete a user's clips."""
+    files = [p for p in folder.iterdir() if p.is_file() and
+             (p.suffix in {".mp4", ".txt"} or p.name in {"report.md", "review.png"})]
+    if not files:
+        return
+    previous = folder / "history" / f"run-{time.time_ns()}"
+    previous.mkdir(parents=True)
+    for path in files:
+        path.rename(previous / path.name)
+    print(f"   prior outputs preserved: {previous}")
+
+
 def slug(text, n=5):
     words = re.findall(r"[A-Za-z0-9']+", text.lower())[:n]
     return "-".join(words)[:44].strip("-") or "clip"
@@ -1004,12 +1025,10 @@ def check():
          "install ffmpeg (it includes ffprobe)")
     line((FONTS / "Montserrat-Black.ttf").exists(), "caption font", "pipeline/fonts is missing")
     line((MODELS_DIR / "yunet.onnx").exists(), "face model", "pipeline/models/yunet.onnx is missing")
+    line((ROOT / "transcribe_worker.py").exists(), "speech worker", "update the full pipeline folder")
     for mod in ("faster_whisper", "cv2", "numpy", "yt_dlp"):
-        try:
-            __import__(mod)
-            line(True, f"python package {mod}")
-        except ImportError:
-            line(False, f"python package {mod}", "run the setup script again")
+        result = subprocess.run([sys.executable, "-c", f"import {mod}"], capture_output=True)
+        line(result.returncode == 0, f"python package {mod}", "run the setup script again")
     line(SKILL.exists() and bool(editorial_rules()), "editorial rules (.agents/skills/clipping)")
     try:
         key = None if NO_AI else api_key()
@@ -1077,8 +1096,7 @@ def main():
     for c in picks:
         print(f"      {c['score']:5.1f}  {c['why_score']}" + (f" · {c['look_why']}" if c.get("look_why") else ""))
 
-    for old in list(OUT.glob("*.mp4")) + list(OUT.glob("[0-9][0-9]-*.txt")) + [OUT / "review.png"]:
-        old.unlink(missing_ok=True)       # never mix two runs in one folder
+    preserve_outputs(OUT)
     print(f"   rendering {len(picks)}...")
     for i, c in enumerate(picks, 1):
         c["file"] = render(video, words, c, i)

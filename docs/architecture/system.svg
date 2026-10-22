@@ -35,9 +35,9 @@
 <text x="81" y="542" font-size="15" style="fill:#3468C5">yt-dlp · ffmpeg</text>
 <rect x="325" y="425" width="240" height="132" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
 <text x="341" y="454" font-size="20" font-weight="700" style="fill:#172E42">Transcription</text>
-<text x="341" y="481" font-size="18" style="fill:#5E7184">Words + timestamps</text>
-<text x="341" y="506" font-size="18" style="fill:#5E7184">Voice alignment</text>
-<text x="341" y="542" font-size="15" style="fill:#3468C5">faster-whisper</text>
+<text x="341" y="481" font-size="18" style="fill:#5E7184">Local speech worker</text>
+<text x="341" y="506" font-size="18" style="fill:#5E7184">Words + alignment</text>
+<text x="341" y="542" font-size="15" style="fill:#3468C5">transcribe_worker.py</text>
 <path d="M280 490 L325 490" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="65" y="601" width="720" height="72" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
 <text x="81" y="630" font-size="20" font-weight="700" style="fill:#172E42">Mode router</text>

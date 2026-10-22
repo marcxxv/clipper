@@ -30,7 +30,7 @@ The seven stages map to the code:
 | Stage | Code |
 |---|---|
 | 1 · Source | `download()` in `pipeline/clips.py` |
-| 2 · Transcribe | `transcribe()`, `refine_timing()` |
+| 2 · Transcribe | `transcribe()` → `transcribe_worker.py`, `refine_timing()`; separate native speech/OpenCV processes |
 | 3 · Choose a mode | `profile()` (or `--mode`) |
 | 4 · Find the story | `pick_hooks()` + `_validate()`, `reedit.py`, `pick_by_energy()` |
 | 5 · Rank | `score.category()` and `score.rank()` in `pipeline/score.py`; clips and visual modes only |

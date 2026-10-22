@@ -6,6 +6,12 @@ Read by OpenCode, Hermes (`clipper` profile), Claude Code and Codex.
 
 **Who you're helping:** assume the user is not technical and is cost-conscious. Give short, plain answers, and state costs in money, e.g. "about 2 cents", not tokens.
 
+## Private continuity
+Read `CONTEXT.local.md` when it exists: it points to this user's private project
+decisions, preferences and trial status. It is optional and git-ignored. Keep
+personal context out of public docs; all agents use the same local file. Read the
+current sources linked there before treating an older status as verified.
+
 ## Do
 - Run the pipeline (`pipeline/clips.py`, `pipeline/reedit.py`) rather than editing video by hand.
 - Put inputs in `sources/`; results land in `output/<video>/`. Keep this layout.

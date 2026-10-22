@@ -6,7 +6,7 @@ A Hermes profile named `clipper` runs the pipeline as an agent. It uses NYO `glm
 
 ```bash
 bash integrations/hermes/install.sh
-clipper chat
+hermes -p clipper
 ```
 
 The script is safe to re-run. It:
@@ -16,14 +16,29 @@ The script is safe to re-run. It:
    - `~/.hermes/profiles/clipper/skills/media/clipping` → `.agents/skills/clipping`
    - `~/.hermes/profiles/clipper/SOUL.md` → `integrations/hermes/SOUL.md`
 
-   It backs up any real file it replaces as `*.bak-YYYYMMDD`;
+   It backs up replaced files and links as `*.bak-YYYYMMDDTHHMMSS-PID`;
 3. copies `NYO_API_KEY` from the repo's `.env` into the profile's `.env` as `HERMES_CUSTOM_NYOLAB_API_KEY` if the profile has no key yet.
 
+For an existing profile it refuses a different working checkout unless you
+explicitly pass `--retarget`. To move deliberately, run
+`bash integrations/hermes/install.sh --retarget` from the intended checkout.
+It backs up `config.yaml` and updates only
+`terminal.cwd` through Hermes, then relinks the skill and identity. Other profile
+settings stay intact. Run it from your chosen checkout to avoid using one copy's
+rules while the terminal runs another copy's code. Verify `pwd` in a new session.
+Running it inside a named Hermes profile uses the same Hermes root; it does not
+create a nested `profiles/clipper/profiles/clipper` directory.
+Folder resolution also ignores `CDPATH`, which otherwise can print the path twice
+and cause a malformed working folder. Temporary test checkouts cannot silently
+retarget an existing profile.
+
 Because of the links, a `git pull` updates the agent too. There's one copy of the rules.
+All agents also read an optional git-ignored `CONTEXT.local.md` through `AGENTS.md`;
+use it for pointers to private decisions and handoffs, not a second rules file.
 
 ## What stays in the profile (not in git)
 
-- `config.yaml`: the model and paths. An existing one is never overwritten. To change the model, edit it, or start from the example again.
+- `config.yaml`: the model and paths. Reinstalling retargets only the working folder and keeps a backup. To change the model, edit it separately.
 - `.env`: the key.
 - Sessions and memory.
 

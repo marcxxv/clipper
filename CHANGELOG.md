@@ -3,6 +3,21 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-22 — portable continuity and runtime repair
+- All agents discover optional private `CONTEXT.local.md`; private context stays ignored.
+- `CLAUDE.md` imports `AGENTS.md` so Claude Code loads the same project rules.
+- Reinstalling Hermes retargets an existing profile's working folder, backs up
+  replaced configuration/links and preserves model/provider settings.
+- Fixed `CDPATH` causing duplicated working-folder values; a different checkout
+  now requires explicit `--retarget`, preventing accidental staging-folder use.
+- Added local `FFMPEG_PATH` support, without committing machine-specific paths.
+- Isolated unchanged Whisper inference in a worker to avoid PyAV/OpenCV macOS
+  library collisions; dependency checks import each package in its own process.
+- Consolidated campaign settings and Git instructions in the skill; documented
+  current payment/platform research and the limits of the hook score.
+- Reruns preserve previous clips, post text, reports and review sheets in
+  `history/run-*/` instead of deleting them.
+
 ## 2026-10-21 — README component architecture
 - Replaced the README's simplified illustration with a detailed system diagram:
   local components, three mode paths, cache, shared rendering, AI boundary and outputs.

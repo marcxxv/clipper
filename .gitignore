@@ -24,3 +24,4 @@ pipeline/dbg*
 
 # personal settings
 settings.local.json
+CONTEXT.local.md
