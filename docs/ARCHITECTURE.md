@@ -14,9 +14,17 @@ a search API, Firecrawl integration or scheduled updater.
 
 The local engine contains ingestion, transcription, three mode paths, rendering and verification. Clips and visual candidates converge at ranking; re-edits assemble a new line order and bypass that scorer. The render row groups shared components rather than implying three independent services.
 
+The top band shows agent-side campaign discovery/extraction, fit and permission
+checks, and local research context before production. Its scraper is optional;
+it does not imply a built-in Firecrawl integration or a background research job.
+Only a reviewed brief and permitted media proceed into the local engine.
+
 The right column separates local support files from the external NYO service. AI badges identify modules that use the shared `_ask()` / `chat()` adapters in `clips.py`; the dashed connector represents that dependency, not a fourth processing path. `--no-ai` skips paid scoring in visual mode. `compare.mp4` is generated only when a prior continuous clip exists.
 
 The SVG has a fixed layout so branch paths, component boundaries and labels stay aligned. Its editable source is `architecture/render-system.py`, which uses Python's standard library. `bash docs/architecture/render.sh` regenerates it along with the D2 diagrams; `--check` validates all three images.
+Keep this main graphic, the README alt text, affected supporting diagrams and
+implementation descriptions synchronized. Inspect an actual rendered preview:
+the freshness check proves reproducibility, not architectural completeness.
 
 ## 2. How a video becomes clips
 

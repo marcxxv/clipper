@@ -36,7 +36,7 @@ current sources linked there before treating an older status as verified.
 - Commit or print `.env` or any key.
 
 ## Keeping records (every change to code, settings, rules or docs)
-1. Update `README.md` / `docs/` if behaviour or settings changed. If a step, mode or flow changed, also update the diagram in `docs/architecture/*.d2` and run `bash docs/architecture/render.sh` (CI fails if the picture is out of date).
+1. Update `README.md` / `docs/` if behaviour or settings changed. Architecture/workflow changes must update the actual README graphic (`docs/architecture/render-system.py` → `system.svg`), its alt text and every affected supporting `.d2`/SVG diagram. Run `bash docs/architecture/render.sh`, inspect the rendered graphic, then run `bash docs/architecture/render.sh --check`. Changing prose or only a supporting diagram does not complete an architecture update. CI checks generated files, not whether their meaning matches the implementation.
 2. Update `.agents/skills/clipping/SKILL.md` if a rule or how-to changed. It's the only copy; every agent and the pipeline read it.
 3. Add a dated entry to `CHANGELOG.md`.
 4. Share it through git, automatically, as below.

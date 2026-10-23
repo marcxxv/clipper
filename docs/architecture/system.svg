@@ -1,17 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1680" viewBox="0 0 1120 1680" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1920" viewBox="0 0 1120 1920" role="img" aria-labelledby="title desc">
 <title id="title">Clipper system architecture</title>
-<desc id="desc">CLI or agents run a local Python pipeline. Video ingestion feeds transcription and a mode router. Clips use AI selection and validation; visual mode uses signal peaks; both are ranked. Re-edits assemble AI-selected lines and bypass ranking. Shared framing, captions and FFmpeg export feed verification and local outputs. Editorial rules, settings, trend briefs and transcript cache support the pipeline. AI-marked modules call the external NYO API.</desc>
+<desc id="desc">An agent can discover campaigns with available web tools or an optional scraper, assess fit and source permissions, and keep research local. This task-triggered workflow is separate from the local Python pipeline and is not a background crawler. CLI or agents run the local pipeline. Video ingestion feeds transcription and a mode router. Clips use AI selection and validation; visual mode uses signal peaks; both are ranked. Re-edits assemble AI-selected lines and bypass ranking. Shared framing, captions and FFmpeg export feed verification and local outputs. Editorial rules, settings, trend briefs and transcript cache support the pipeline. AI-marked modules call the external NYO API.</desc>
 <defs>
 <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#3468C5" stroke-width="1.5"/></marker>
 <marker id="aiarrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#A85B15" stroke-width="1.5"/></marker>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#172E42}.small{fill:#5E7184}path,line{stroke-linejoin:round;stroke-linecap:round}</style>
-</defs><rect width="1120" height="1680" fill="#F7F9FC"/>
+</defs><rect width="1120" height="1920" fill="#F7F9FC"/>
 <text x="40" y="48" font-size="16" font-weight="700" style="fill:#3468C5">CLIPPER</text>
 <text x="40" y="94" font-size="38" font-weight="700" style="fill:#172E42">System architecture</text>
-<text x="40" y="125" font-size="21" style="fill:#5E7184">Three processing paths. One local video engine.</text>
+<text x="40" y="125" font-size="21" style="fill:#5E7184">Agent research, permitted sources and one local video engine.</text>
+<rect x="40" y="156" width="1040" height="210" rx="14" fill="#EDF2FA" stroke="#D6E0EF"/>
+<text x="60" y="185" font-size="15" font-weight="700" style="fill:#3468C5">AGENT WORKFLOW · BEFORE PRODUCTION</text>
+<text x="740" y="185" font-size="15" style="fill:#5E7184">On request · no background crawler</text>
+<rect x="60" y="208" width="300" height="120" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="76" y="237" font-size="20" font-weight="700" style="fill:#172E42">Discover &amp; extract</text>
+<text x="76" y="264" font-size="18" style="fill:#5E7184">Agent search / web fetch</text>
+<text x="76" y="289" font-size="18" style="fill:#5E7184">Optional Firecrawl / scraper</text>
+<rect x="410" y="208" width="300" height="120" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="426" y="237" font-size="20" font-weight="700" style="fill:#172E42">Check fit &amp; permission</text>
+<text x="426" y="264" font-size="18" style="fill:#5E7184">Brief, dates, terms, rights</text>
+<text x="426" y="289" font-size="18" style="fill:#5E7184">Hidden terms stay unknown</text>
+<rect x="760" y="208" width="300" height="120" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
+<text x="776" y="237" font-size="20" font-weight="700" style="fill:#172E42">Keep context local</text>
+<text x="776" y="264" font-size="18" style="fill:#5E7184">Research + asset index</text>
+<text x="776" y="289" font-size="18" style="fill:#5E7184">Refresh facts when used</text>
+<path d="M360 268 L410 268" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M710 268 L760 268" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="60" y="353" font-size="16" style="fill:#5E7184">Reviewed brief + permitted media feed the pipeline below.</text>
+<g transform="translate(0 240)">
 <rect x="40" y="156" width="1040" height="112" rx="14" fill="#EDF2FA" stroke="#D6E0EF"/>
 <rect x="60" y="174" width="275" height="76" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
-<text x="76" y="203" font-size="20" font-weight="700" style="fill:#172E42">YouTube / local video</text>
+<text x="76" y="203" font-size="20" font-weight="700" style="fill:#172E42">Permitted source video</text>
 <text x="76" y="235" font-size="15" style="fill:#3468C5">URL or sources/&lt;video&gt;</text>
 <rect x="405" y="174" width="300" height="76" rx="12" fill="#FFFFFF" stroke="#CFD9E4"/>
 <text x="421" y="203" font-size="20" font-weight="700" style="fill:#172E42">CLI or coding agent</text>
@@ -20,6 +39,7 @@
 <text x="791" y="203" font-size="20" font-weight="700" style="fill:#172E42">Campaign configuration</text>
 <text x="791" y="235" font-size="15" style="fill:#3468C5">settings.local.json</text>
 <path d="M335 212 L405 212" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M555 88 L555 174" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
 <path d="M918 250 L918 320" fill="none" stroke="#3468C5" stroke-width="2"/>
 <rect x="40" y="328" width="770" height="1120" rx="18" fill="#EEF3FA" stroke="#B7CADD"/>
 <text x="60" y="360" font-size="17" font-weight="700" style="fill:#3468C5">LOCAL ENGINE</text>
@@ -107,8 +127,8 @@
 <text x="81" y="1115" font-size="18" style="fill:#5E7184">AI review of 3 phone-cropped frames</text>
 <text x="81" y="1133" font-size="15" style="fill:#3468C5">score.py · category() / rank()</text>
 <path d="M675 986 L675 1187 L425 1187" fill="none" stroke="#3468C5" stroke-width="2"/>
-<text x="574" y="1080" font-size="16" style="fill:#5E7184">New line order</text>
-<text x="574" y="1105" font-size="16" style="fill:#5E7184">Skips ranking</text>
+<text x="550" y="1080" font-size="16" style="fill:#5E7184">New line order</text>
+<text x="550" y="1105" font-size="16" style="fill:#5E7184">Skips ranking</text>
 <path d="M300 1148 L300 1187 L425 1187 L425 1239" fill="none" stroke="#3468C5" stroke-width="2" marker-end="url(#arrow)"/>
 <rect x="840" y="824" width="240" height="281" rx="14" fill="#FFF5E7" stroke="#D8B98F" stroke-dasharray="6 5"/>
 <text x="860" y="859" font-size="16" font-weight="700" style="fill:#A85B15">EXTERNAL SERVICE</text>
@@ -156,5 +176,5 @@
 <text x="610" y="1540" font-size="22" font-weight="700" style="fill:#172E42">Re-edits → reedit/</text>
 <text x="610" y="1569" font-size="18" style="fill:#5E7184">A / B / C shorts · *.txt · report.md</text>
 <text x="610" y="1597" font-size="16" style="fill:#5E7184">compare.mp4 when a prior clip exists</text>
-<text x="40" y="1650" font-size="16" style="fill:#5E7184">Solid arrows: local data flow     AI badges: NYO dependency     Dashed boundary: external API</text>
-</svg>
+<text x="40" y="1650" font-size="16" style="fill:#5E7184">Solid: workflow / data flow · AI badges: NYO · Dashed: external API</text>
+</g></svg>

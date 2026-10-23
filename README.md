@@ -18,11 +18,13 @@ Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Sho
 
 <p align="center">
   <a href="docs/architecture/system.svg">
-    <img src="docs/architecture/system.svg" width="1000" alt="Clipper architecture: video ingestion, local transcription and cache, clips/visual/re-edit branches, ranking, shared rendering and verification, local outputs, configuration, and external NYO AI service.">
+    <img src="docs/architecture/system.svg" width="1000" alt="Clipper architecture: agent-side campaign discovery, optional scraping, fit and source-permission checks, and private research context feed a separate local pipeline for transcription, clips/visual/re-edit selection, ranking, rendering, verification and outputs; AI modules use NYO.">
   </a>
 </p>
 
 Component details and collaboration workflow: **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+Architecture changes must update this graphic, its editable source and affected
+supporting diagrams together; regenerate and visually inspect before sharing.
 
 It runs on **Windows, macOS and Linux**, either by itself or with an AI coding agent (**OpenCode**, **Hermes**, Claude Code, Codex). The agent reads the same rules either way.
 

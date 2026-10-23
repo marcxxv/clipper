@@ -9,14 +9,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parent
 INK, MUTED, BLUE, AMBER = '#172E42', '#5E7184', '#3468C5', '#A85B15'
-parts = ['''<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1680" viewBox="0 0 1120 1680" role="img" aria-labelledby="title desc">
+parts = ['''<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1920" viewBox="0 0 1120 1920" role="img" aria-labelledby="title desc">
 <title id="title">Clipper system architecture</title>
-<desc id="desc">CLI or agents run a local Python pipeline. Video ingestion feeds transcription and a mode router. Clips use AI selection and validation; visual mode uses signal peaks; both are ranked. Re-edits assemble AI-selected lines and bypass ranking. Shared framing, captions and FFmpeg export feed verification and local outputs. Editorial rules, settings, trend briefs and transcript cache support the pipeline. AI-marked modules call the external NYO API.</desc>
+<desc id="desc">An agent can discover campaigns with available web tools or an optional scraper, assess fit and source permissions, and keep research local. This task-triggered workflow is separate from the local Python pipeline and is not a background crawler. CLI or agents run the local pipeline. Video ingestion feeds transcription and a mode router. Clips use AI selection and validation; visual mode uses signal peaks; both are ranked. Re-edits assemble AI-selected lines and bypass ranking. Shared framing, captions and FFmpeg export feed verification and local outputs. Editorial rules, settings, trend briefs and transcript cache support the pipeline. AI-marked modules call the external NYO API.</desc>
 <defs>
 <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#3468C5" stroke-width="1.5"/></marker>
 <marker id="aiarrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="#A85B15" stroke-width="1.5"/></marker>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#172E42}.small{fill:#5E7184}path,line{stroke-linejoin:round;stroke-linecap:round}</style>
-</defs><rect width="1120" height="1680" fill="#F7F9FC"/>''']
+</defs><rect width="1120" height="1920" fill="#F7F9FC"/>''']
 
 def rect(x,y,w,h,fill='#FFFFFF',stroke='#CFD9E4',r=12,dash=None):
     parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" rx="{r}" fill="{fill}" stroke="{stroke}"'+(f' stroke-dasharray="{dash}"' if dash else '')+'/>')
@@ -50,12 +50,30 @@ def section(x,y,n,label):
 # Header and entry points.
 text(40,48,'CLIPPER',16,BLUE,True)
 text(40,94,'System architecture',38,INK,True)
-text(40,125,'Three processing paths. One local video engine.',21,MUTED)
-rect(40,156,1040,112,'#EDF2FA','#D6E0EF',14)
-node(60,174,275,76,'YouTube / local video',code='URL or sources/<video>')
+text(40,125,'Agent research, permitted sources and one local video engine.',21,MUTED)
+# Agent-side research is separate from the executable pipeline.
+rect(40,156,1040,210,'#EDF2FA','#D6E0EF',14)
+text(60,185,'AGENT WORKFLOW · BEFORE PRODUCTION',15,BLUE,True)
+text(740,185,'On request · no background crawler',15,MUTED)
+node(60,208,300,120,'Discover & extract',
+     ['Agent search / web fetch','Optional Firecrawl / scraper'])
+node(410,208,300,120,'Check fit & permission',
+     ['Brief, dates, terms, rights','Hidden terms stay unknown'])
+node(760,208,300,120,'Keep context local',
+     ['Research + asset index','Refresh facts when used'])
+flow([(360,268),(410,268)])
+flow([(710,268),(760,268)])
+text(60,353,'Reviewed brief + permitted media feed the pipeline below.',16,MUTED)
+
+# Preserve the local-engine layout below the new research band.
+parts.append('<g transform="translate(0 240)">')
+rect(40,156,1040,112,'#EDF2FA' ,'#D6E0EF',14)
+node(60,174,275,76,'Permitted source video',code='URL or sources/<video>')
 node(405,174,300,76,'CLI or coding agent',code='pipeline/clips.py')
 node(775,174,285,76,'Campaign configuration',code='settings.local.json')
 flow([(335,212),(405,212)])
+# Join the research gate to the agent entry without implying a crawler module.
+flow([(555,88),(555,174)])
 
 flow([(918,250),(918,320)],arrow=False)
 
@@ -108,8 +126,8 @@ flow([(175,986),(175,1012),(300,1012),(300,1034)])
 flow([(425,986),(425,1012),(300,1012)],arrow=False)
 node(65,1034,470,114,'Hook ranking',['Voice + picture + category weights','AI review of 3 phone-cropped frames'],True,'score.py · category() / rank()')
 flow([(675,986),(675,1187),(425,1187)],arrow=False)
-text(574,1080,'New line order',16,MUTED)
-text(574,1105,'Skips ranking',16,MUTED)
+text(550,1080,'New line order',16,MUTED)
+text(550,1105,'Skips ranking',16,MUTED)
 flow([(300,1148),(300,1187),(425,1187),(425,1239)])
 
 # Provider boundary uses a single boundary connector plus matching AI badges.
@@ -150,8 +168,8 @@ text(60,1569,'01-*.mp4 · *.txt · report.md · review.png',18,MUTED)
 text(610,1540,'Re-edits → reedit/',22,INK,True)
 text(610,1569,'A / B / C shorts · *.txt · report.md',18,MUTED)
 text(610,1597,'compare.mp4 when a prior clip exists',16,MUTED)
-text(40,1650,'Solid arrows: local data flow     AI badges: NYO dependency     Dashed boundary: external API',16,MUTED)
-parts.append('</svg>')
+text(40,1650,'Solid: workflow / data flow · AI badges: NYO · Dashed: external API',16,MUTED)
+parts.append('</g></svg>')
 output = Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'system.svg'
 output.write_text('\n'.join(parts)+'\n', encoding='utf-8')
 print(f'Rendered {output}')

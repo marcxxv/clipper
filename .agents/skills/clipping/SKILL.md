@@ -1,7 +1,7 @@
 ---
 name: clipping
 description: "Research and assess clipping campaigns and permitted footage with available agent web tools, then run the clipper pipeline and review hooks, captions and output."
-version: 2.5.0
+version: 2.5.1
 ---
 
 # Clipping
@@ -170,8 +170,10 @@ The pipeline chooses automatically; override with `--mode=` when it is wrong.
 ## Keeping records (every change)
 
 1. Update `README.md` / `docs/` if behaviour or settings changed; for a new
-   step, mode or flow, update `docs/architecture/*.d2` and run
-   `bash docs/architecture/render.sh`.
+   step, mode, flow or architecture, update the README's main graphic source
+   (`docs/architecture/render-system.py`), its `system.svg` and README alt text,
+   plus affected supporting `.d2`/SVG diagrams. Regenerate, visually inspect and
+   run `bash docs/architecture/render.sh --check`; prose-only updates are incomplete.
 2. Update this skill if a rule or how-to changed.
 3. Add a dated line to `CHANGELOG.md`.
 4. Follow `AGENTS.md` for Git permissions: owner, invited collaborator and

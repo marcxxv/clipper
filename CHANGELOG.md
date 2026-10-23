@@ -3,6 +3,13 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-23 — README architecture research layer
+- Updated the README's main system graphic and alt text to show agent research,
+  optional scraping, campaign fit/permission checks and local context before the
+  existing video engine. Rendering behavior is unchanged.
+- Made main-graphic regeneration and visual inspection explicit in agent/skill
+  rules; diagram freshness alone does not prove architectural completeness.
+
 ## 2026-10-23 — campaign research and maintained documentation
 - Documented agent-assisted discovery, extraction, campaign/footage fit checks,
   evidence status and optional Firecrawl use without adding an API integration.
