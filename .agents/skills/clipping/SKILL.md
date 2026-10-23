@@ -1,7 +1,7 @@
 ---
 name: clipping
 description: "Run the clipper pipeline (any video or YouTube link to vertical captioned shorts) and apply its editorial rules: pick hooks, write titles, check clips before publishing."
-version: 2.3.0
+version: 2.4.0
 ---
 
 # Clipping
@@ -14,6 +14,12 @@ Read the optional git-ignored `CONTEXT.local.md` for this user's private context
 pointers and current decisions. Shared research: `docs/PLATFORM-RESEARCH.md`.
 
 ## Running it
+
+For a new campaign, first follow `docs/ASSET-ORGANIZATION.md`: put the brief and
+permitted source media in an ignored campaign folder, keep a provenance/rights
+index, and use explicit source paths. Do not repeatedly leave assets in Downloads,
+duplicate them in the hub/public Git, or treat a brief as permission to use random
+online footage. Local plans track missing requirements, deadlines and output paths.
 
 From the repository root. The Python inside the setup's virtual environment:
 

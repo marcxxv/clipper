@@ -3,6 +3,12 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-23 — campaign asset organization
+- Added a shared procedure for organizing supplied briefs and permitted media,
+  verifying moves and tracking source rights, missing inputs and output paths.
+- Campaign source folders and planning/output workspaces use existing ignored
+  `sources/` and `output/`; explicit video paths preserve pipeline compatibility.
+
 ## 2026-10-22 — portable continuity and runtime repair
 - All agents discover optional private `CONTEXT.local.md`; private context stays ignored.
 - `CLAUDE.md` imports `AGENTS.md` so Claude Code loads the same project rules.

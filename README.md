@@ -139,6 +139,10 @@ Current payment and platform findings: [platform research](docs/PLATFORM-RESEARC
 
 ## Repository layout
 
+For campaign briefs, downloads, provenance and output tracking, follow
+[asset organization](docs/ASSET-ORGANIZATION.md). Campaign material stays local;
+only these reusable instructions are shared through Git.
+
 ```
 clipper/
 ├── README.md                 this file

@@ -15,6 +15,9 @@ current sources linked there before treating an older status as verified.
 ## Do
 - Run the pipeline (`pipeline/clips.py`, `pipeline/reedit.py`) rather than editing video by hand.
 - Put inputs in `sources/`; results land in `output/<video>/`. Keep this layout.
+- Organize campaign downloads before production using `docs/ASSET-ORGANIZATION.md`.
+  Keep briefs, source assets and campaign plans local and ignored; move only the
+  files supplied/authorized for the task, verify their hashes, and record origin/rights.
 - After a run, read `report.md` and look at real frames before calling a clip good. Lines starting with `!` in the run output are problems; deal with them.
 - Set clip length from the campaign brief when the user mentions one.
 - If setup looks broken, run `clips.py --check` first.
