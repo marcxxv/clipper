@@ -4,7 +4,7 @@ Read by OpenCode, Hermes (`clipper` profile), Claude Code and Codex.
 
 **What this is:** a pipeline that turns videos into vertical captioned shorts for clipping campaigns. How to run it and the editorial rules: `.agents/skills/clipping/SKILL.md`. Details: `docs/HOW-IT-WORKS.md`.
 
-**Who you're helping:** assume the user is not technical and is cost-conscious. Give short, plain answers, and state costs in money, e.g. "about 2 cents", not tokens.
+**Who you're helping:** follow the current user's stated technical level and budget. Give plain answers and state costs in money, e.g. "about 2 cents", not tokens alone. Private preferences belong in local context.
 
 ## Private continuity
 Read `CONTEXT.local.md` when it exists: it points to this user's private project
@@ -13,6 +13,12 @@ personal context out of public docs; all agents use the same local file. Read th
 current sources linked there before treating an older status as verified.
 
 ## Do
+- Research suitable campaigns and approved source footage before recommending
+  production. Follow `docs/CAMPAIGN-RESEARCH.md`: classify the actual assignment,
+  verify dated evidence and fit, and distinguish hidden terms from confirmed ones.
+- Use available agent web tools or optional scraping APIs; discover capabilities
+  first. Never claim a crawler is installed or free allowance is available without
+  checking. Research is agent-assisted; the Python pipeline is not a web researcher.
 - Run the pipeline (`pipeline/clips.py`, `pipeline/reedit.py`) rather than editing video by hand.
 - Put inputs in `sources/`; results land in `output/<video>/`. Keep this layout.
 - Organize campaign downloads before production using `docs/ASSET-ORGANIZATION.md`.
@@ -36,6 +42,15 @@ current sources linked there before treating an older status as verified.
 4. Share it through git, automatically, as below.
 
 A change that lives only in a chat is lost.
+
+## Keep the workflow current
+On each relevant task, recheck live campaign terms and provider documentation
+before relying on old research. When a verified change affects how to work,
+update the affected docs, this skill, changelog and diagrams as needed, then use
+the Git workflow below. Keep personal research/results in ignored local folders.
+Refresh is task-triggered agent work: no unattended job or automatic promotion of
+webpage instructions. If a check is blocked, record the unknown and next action.
+Never change models, permissions, credentials or spending limits as maintenance.
 
 ## Git: automatic, no need to ask
 

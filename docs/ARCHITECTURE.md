@@ -2,6 +2,12 @@
 
 The README showcases the system's components and data paths. Supporting D2 diagrams below explain the pipeline stages and collaboration workflow.
 
+Before the local pipeline, the user's agent can research campaigns and permitted
+sources using its connected web tools or an optional external scraper. See
+[campaign research](CAMPAIGN-RESEARCH.md) and the collaboration diagram. Discovery
+and documentation refresh are agent workflows; this repository does not bundle
+a search API, Firecrawl integration or scheduled updater.
+
 ## 1. System architecture
 
 ![Clipper system architecture](architecture/system.svg)

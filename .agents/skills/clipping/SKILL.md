@@ -1,7 +1,7 @@
 ---
 name: clipping
-description: "Run the clipper pipeline (any video or YouTube link to vertical captioned shorts) and apply its editorial rules: pick hooks, write titles, check clips before publishing."
-version: 2.4.0
+description: "Research and assess clipping campaigns and permitted footage with available agent web tools, then run the clipper pipeline and review hooks, captions and output."
+version: 2.5.0
 ---
 
 # Clipping
@@ -12,6 +12,17 @@ markers is sent to the AI on every run, so edit rules here, not in the code.
 How it works in detail: `docs/HOW-IT-WORKS.md`. Change history: `CHANGELOG.md`.
 Read the optional git-ignored `CONTEXT.local.md` for this user's private context
 pointers and current decisions. Shared research: `docs/PLATFORM-RESEARCH.md`.
+
+## Discover, assess, then produce
+
+Use `docs/CAMPAIGN-RESEARCH.md` for campaign discovery, public-page extraction,
+rights/terms checks and fit classification. Use the agent's actual available
+tools; Firecrawl is optional and is not integrated into this pipeline. Return
+one evidence-backed recommendation and its next action; hidden terms stay unknown.
+On subsequent tasks, refresh volatile facts and maintain the affected docs,
+skill, changelog and diagrams after verified workflow changes. This is triggered
+by work, not a scheduled background service. Keep personal selections, account
+state, scrape results and identifiers in ignored local files, never public docs.
 
 ## Running it
 

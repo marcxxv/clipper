@@ -1,5 +1,10 @@
 # Clipping economics and platform research
 
+For repeatable discovery and refresh rules, use [campaign research](CAMPAIGN-RESEARCH.md).
+This page contains dated general findings, not anyone's campaign selections or
+live account state. Recheck linked sources before decisions; its date is not a
+promise that prices or policies remain unchanged.
+
 Checked 2026-10-22. Public sources are leads to check again before a campaign;
 they do not establish a user's eligibility or likely earnings.
 

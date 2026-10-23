@@ -3,6 +3,14 @@
 Newest first. Every change to code, settings, rules or docs gets a dated entry here
 (see `AGENTS.md`).
 
+## 2026-10-23 — campaign research and maintained documentation
+- Documented agent-assisted discovery, extraction, campaign/footage fit checks,
+  evidence status and optional Firecrawl use without adding an API integration.
+- Added task-triggered freshness and documentation maintenance rules; no scheduler,
+  paid tool, credential or pipeline behavior was changed.
+- Kept personalized research and account context local; updated the collaboration
+  diagram to distinguish research from the rendering pipeline.
+
 ## 2026-10-23 — campaign asset organization
 - Added a shared procedure for organizing supplied briefs and permitted media,
   verifying moves and tracking source rights, missing inputs and output paths.

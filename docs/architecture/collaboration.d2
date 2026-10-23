@@ -18,20 +18,21 @@ people: "01  /  PEOPLE & AGENTS" {
   owner: "OWNER · macOS\nHermes / clipper profile\nNYO glm-5.3-flash" {class: lane}
   friend: "COLLABORATOR · Windows\nOpenCode\nNYO glm-5.3-flash" {class: lane}
 }
-repo: "02  /  ONE SHARED REPOSITORY\nAGENTS.md · workflow and permissions\n.agents/skills/clipping/ · run guide and editorial brief\npipeline/ · implementation and docs/ · documentation" {class: step}
-share: "03  /  SHARE A TESTED CHANGE" {
+research: "02  /  RESEARCH & CHECK FIT\nAgent web tools or optional scraper · verify brief and source rights\nKeep personal findings local; refresh facts when used" {class: step}
+repo: "03  /  ONE SHARED REPOSITORY\nAGENTS.md · workflow and permissions\n.agents/skills/clipping/ · run guide and editorial brief\npipeline/ · implementation and docs/ · documentation" {class: step}
+share: "04  /  SHARE A TESTED CHANGE" {
   class: group
   grid-columns: 2
   grid-gap: 20
   direct: "OWNER\nCommit + push to main\nOwner bypass is allowed" {class: lane}
   pr: "COLLABORATOR\nimprove/… branch → pull request\nDescribe what, why and tests" {class: lane}
 }
-checks: "04  /  GITHUB CHECKS\nWindows + Linux · install and offline pipeline run\nD2 sources must match the committed diagrams\nFix failures; merge collaborator PRs when green" {class: step}
-main: "05  /  MAIN → EVERYONE\nOwner updates and approved improvements\ngit pull brings the shared changes to each computer" {
+checks: "05  /  GITHUB CHECKS\nWindows + Linux · install and offline pipeline run\nD2 sources must match the committed diagrams\nFix failures; merge collaborator PRs when green" {class: step}
+main: "06  /  MAIN → EVERYONE\nOwner updates and approved improvements\ngit pull brings the shared changes to each computer" {
   class: step
   style: {fill: "#EAF5EF"; stroke: "#93B7A3"}
 }
-people -> repo -> share -> checks -> main
+people -> research -> repo -> share -> checks -> main
 notes: |md
   **Every push and pull request runs checks.**
 

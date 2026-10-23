@@ -3,6 +3,10 @@
 Turn any video into vertical, captioned shorts for TikTok, Reels and YouTube Shorts: talks, podcasts, interviews, trailers, gameplay, or a YouTube link. Built for Whop Content Rewards clipping campaigns.
 
 - **Finds the moments.** An AI (NYO `glm-5.3-flash`) reads the transcript and picks the strongest standalone moments. Every clip opens on a clean sentence and ends after one.
+- **Research with your agent.** Agents with web tools can discover campaigns,
+  read briefs and assess permitted footage before clipping. The
+  [research workflow](docs/CAMPAIGN-RESEARCH.md) covers fit, evidence, optional
+  Firecrawl and privacy. This is agent-side work, not a built-in crawler.
 - **Frames them for a phone.** Per camera shot: follows a face, stacks two speakers, or shows wide shots whole over a dark blur.
 - **Karaoke captions.** The spoken word lights up exactly when it is said (about 20 ms accuracy), and nothing shows while the speaker is silent.
 - **Works on trailers too.** Fast-cut videos are re-edited into a new story (hook → build → payoff) with soft cross-fades.
@@ -122,6 +126,8 @@ re-run the Hermes integration after moving it. Profile sessions remain private.
 
 The hook score is an editorial aid, not a validated forecast of views or earnings.
 Current payment and platform findings: [platform research](docs/PLATFORM-RESEARCH.md).
+Agents recheck changing facts when used and maintain the shared docs after verified
+workflow changes. There is no bundled background research/update service.
 
 ---
 
